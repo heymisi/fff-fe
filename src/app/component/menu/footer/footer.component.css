@@ -1,0 +1,12 @@
+a.nav-link {
+    font-size: large;
+}
+
+.footer {
+    margin-top: 10px;
+    background-color: #042c67;
+}
+
+.cursor {
+    cursor: pointer;
+}

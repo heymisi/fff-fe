@@ -1,0 +1,158 @@
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<p-toast position="center"></p-toast>
+
+<body>
+    <div class="main-content">
+
+        <!-- Page content -->
+        <div class="container-fluid mt--7" style="padding-top: 100px;">
+            <div class="row">
+                <div class="col-xl-3 order-xl-1  bg-gradient-primary">
+                    <div class="menu-sidebar-content js-scrollbar1" style="overflow:auto;">
+                        <nav class="navbar-sidebar">
+                            <div class="align-items-center text-center" style="padding-top: 20px;">
+                                <h1 style="color:white;" class="text-center">FELHASZNÁLÓI FIÓK</h1>
+                                <h2 style="color: wheat;"><em>{{user.firstName}} {{user.lastName}}</em></h2>
+                            </div>
+                            <ul class="navbar-nav  sidebar-dark" style=" overflow-y:auto;">
+                                <hr class="sidebar-divider my-0">
+                                <!-- Sidebar - Brand -->
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/user/profile">
+                                        <span class="fa fa-user-circle" style="font-size: 1.3em;cursor:pointer">
+                                            Személyes adatok</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/user/cart-details">
+                                        <span class="fa fa-shopping-cart" style="font-size: 1.3em;cursor:pointer">
+                                            Kosaram</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/user/purhcases">
+
+                                        <span class="bi bi-bag-fill" style="font-size: 1.3em;cursor:pointer">
+                                            Vásárlásaim</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/user/training-sessions">
+                                        <span style="font-size: 1.3em;cursor:pointer"><span class="material-icons">
+                                                directions_run
+                                            </span> Edzéseim</span>
+                                    </a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+
+                                <!-- Nav Item - Tables -->
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em; cursor: pointer;">
+                                    <a class="nav-link" (click)="logout()">
+                                        <span class="bi bi-chevron-bar-right" style="font-size: 1.3em;cursor:pointer">
+                                            Kilépés</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+
+
+
+                                <!-- Divider -->
+                                <hr class="sidebar-divider d-none d-md-block">
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+                <div class="col-xl-9 order-xl-2 mb-5 mb-xl-0">
+                    <div class="card bg-secondary shadow">
+                        <div class="card-header bg-white border-0">
+                            <div class="text-center">
+                                <h1 class="mb-0"><b>Edzéseim</b></h1>
+                            </div>
+                            <div class="card-body">
+                                <div class="idance">
+                                    <div class="schedule content-block">
+                                        <div class="container-fluid">
+                                            <div class="timetable">
+                                                <mat-tab-group color="primary" backgroundColor="primary">
+                                                    <mat-tab *ngFor="let day of weekDays" [label]="day.day" style="width: 100%;">
+                                                        <div class="tab-content" style="padding-bottom: 2em; overflow: hidden;">
+                                                            <div class="tab-pane show active">
+                                                                <div *ngIf="day.counter == 0" class="text-center" style="padding-top:4em;">
+                                                                    <h2>Ezen a napon nincsenek edzéseim</h2>
+                                                                </div>
+                                                                <ng-container>
+                                                                    <div *ngIf="day.counter != 0">
+                                                                        <div class="row">
+                                                                            <div class="col-md-6" *ngFor="let session of day.value">
+                                                                                <div class="timetable-item">
+                                                                                    <div class="timetable-item-main">
+                                                                                        <h2> <span class="timetable-item-time" *ngIf="session.sessionStart >= 12">
+                                                                                                du.
+                                                                                                {{session.sessionStart}}:00
+                                                                                                -
+                                                                                                {{session.sessionEnd}}:00
+                                                                                            </span>
+                                                                                            <span class="timetable-item-time" *ngIf="session.sessionStart < 12">
+                                                                                                de.
+                                                                                                {{session.sessionStart}}:00
+                                                                                                -
+                                                                                                {{session.sessionEnd}}:00
+                                                                                            </span> &emsp;
+                                                                                            <span class="timetable-item-instr">
+                                                                                                edző:
+                                                                                                <a
+                                                                                                    routerLink="/instructors/{{session.instructor.id}}"><b>
+                                                                                                        {{session.instructor.user?.firstName}}
+                                                                                                        {{session.instructor.user?.lastName}}</b></a>
+
+                                                                                            </span>
+                                                                                        </h2>
+
+                                                                                        <div class="timetable-item-time">
+                                                                                            {{session.name}} &emsp;&ensp;
+                                                                                            <span class="timetable-item-name" *ngIf="session.trainingSessionType === 'Csoportos edzés'">
+                                                                                                ({{session.trainingSessionType}})
+                                                                                            </span>
+                                                                                            <span class="timetable-item-name" *ngIf="session.trainingSessionType === 'Személyi edzés'">
+                                                                                                ({{session.trainingSessionType}})</span>
+
+                                                                                        </div>
+                                                                                        <a class="btn btn-primary btn-book" (click)="deleteTrainingSession(session)" style="color:white">Lemondás</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </ng-container>
+                                                            </div>
+                                                        </div>
+                                                    </mat-tab>
+                                                </mat-tab-group>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<p-confirmDialog #cd [style]="{width: '450px'}">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-times" label="Mégsem" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa fa-check" label="Igen" (click)="cd.accept()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-confirmDialog key="logoutDialog" #cd2 [style]="{width: '450px'}">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-times" label="Mégsem" (click)="cd2.reject()"></button>
+        <button type="button" pButton icon="fa fa-check" label="Kijelentkezek" (click)="cd2.accept()"></button>
+    </p-footer>
+</p-confirmDialog>

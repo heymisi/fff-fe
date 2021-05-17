@@ -1,0 +1,24 @@
+.card {
+    margin-top: auto;
+    margin-bottom: auto;
+    justify-content: center;
+    width: 900px;
+    background-color: #ECFCFD !important;
+}
+
+.card-header {
+    background-color: white !important;
+}
+
+.mat-form-field {
+    width: 800px;
+}
+
+.login_btn {
+    background-color: #205b8d;
+    color: white;
+}
+
+.main-content {
+    background: url("/assets/images/contact-us.jpg") no-repeat center center;
+}

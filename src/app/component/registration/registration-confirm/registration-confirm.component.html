@@ -1,0 +1,19 @@
+<div class="main-content">
+    <div class="container">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card">
+                <div class="card-header">
+                    <div *ngIf="isValid; else elseBlock">
+                        <h1>Fiókod sikeresen aktiválva!</h1>
+                        <h2>Ezzel már a megadott adataiddal <a routerLink="/login">be tudsz jelentkezni</a> oldalunkon!
+                        </h2>
+                    </div>
+                    <ng-template #elseBlock>
+                        <h1>Sajnos a regisztrációd érvényességi ideje lejárt!</h1>
+                        <h2><a routerLink="/register">Regisztráljon újra oldalunkon!</a></h2>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

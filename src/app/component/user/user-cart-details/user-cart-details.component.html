@@ -1,0 +1,69 @@
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
+<body>
+    <div class="main-content">
+
+        <!-- Page content -->
+        <div class="container-fluid mt--7" style="padding-top: 100px;">
+            <div class="row">
+                <div class="col-xl-3 order-xl-1  bg-gradient-primary">
+                    <div class="menu-sidebar-content js-scrollbar1" style="overflow:auto;">
+                        <nav class="navbar-sidebar">
+                            <div class="align-items-center text-center" style="padding-top: 20px;">
+                                <h1 style="color:white;" class="text-center">FELHASZNÁLÓI FIÓK</h1>
+                                <h2 style="color: wheat;"><em>{{user.firstName}} {{user.lastName}}</em></h2>
+                            </div>
+                            <ul class="navbar-nav  sidebar-dark" style=" overflow-y:auto;">
+                                <hr class="sidebar-divider my-0">
+                                <!-- Sidebar - Brand -->
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/user/profile">
+                                        <span class="fa fa-user-circle" style="font-size: 1.3em;cursor:pointer"> Személyes adatok</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/user/cart-details">
+                                        <span class="fa fa-shopping-cart" style="font-size: 1.3em;cursor:pointer"> Kosaram</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/user/purhcases">
+                                        <span class="bi bi-bag-fill" style="font-size: 1.3em;cursor:pointer"> Vásárlásaim</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/user/training-sessions">
+                                        <span style="font-size: 1.3em;cursor:pointer"><span class="material-icons">
+                        directions_run
+                      </span> Edzéseim</span>
+                                    </a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+                                <!-- Nav Item - Tables -->
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em; cursor: pointer;">
+                                    <a class="nav-link" (click)="logout()">
+                                        <span class="bi bi-chevron-bar-right" style="font-size: 1.3em;cursor:pointer"> Kilépés</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+                                <!-- Divider -->
+                                <hr class="sidebar-divider d-none d-md-block">
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+                <div class="col-xl-9 order-xl-2 mb-5 mb-xl-0">
+                    <app-cart-details></app-cart-details>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<p-confirmDialog key="logoutDialog" #cd2 [style]="{width: '450px'}">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-times" label="Mégsem" (click)="cd2.reject()"></button>
+        <button type="button" pButton icon="fa fa-check" label="Kijelentkezek" (click)="cd2.accept()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-toast position="center"></p-toast>

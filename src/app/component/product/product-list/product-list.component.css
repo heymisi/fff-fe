@@ -1,0 +1,87 @@
+.content {
+    padding-top: 65px;
+    overflow: hidden;
+    width: 100%;
+    margin: 10px auto;
+}
+
+.mr-2 {
+    font-size: larger;
+}
+
+.card-text {
+    line-height: 1.5em;
+    height: 3em;
+    overflow: hidden;
+}
+
+.mr-auto {
+    font-size: larger;
+}
+
+.side-menu-category {
+    width: 250px;
+    position: fixed;
+    top: 75px;
+    background: #f7f1f0;
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+}
+
+ngb-pagination ::ng-deep ul>li:not(.active)>a {
+    background-color: lightblue !important;
+    color: black;
+}
+
+ngb-pagination ::ng-deep ul>li.active>a {
+    background-color: #205b8d !important;
+    color: white;
+}
+
+.blue-btn {
+    height: 2.5em;
+    color: white;
+    background-color: #205b8d;
+}
+
+.yellow-btn {
+    height: 2.5em;
+    border: none;
+    color: black;
+    background-color: #FFC312;
+    font-weight: 500;
+}
+
+.blog-title {
+    margin-bottom: 0;
+    font-size: 2rem;
+    font-weight: 400;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+}
+
+img {
+    width: 500px;
+    height: 500px;
+}
+
+.loading-indicator {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}

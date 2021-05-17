@@ -1,0 +1,139 @@
+<p-toast position="center">
+</p-toast>
+
+<div class="detail-section">
+    <div class="container" style="padding-top: 80px; background-color: white;">
+        <div class="row">
+            <div class="col-7 item-photo">
+                <img class="p-shadow-4" src={{product.imageString}} width="670px" height="600px" />
+            </div>
+            <div class="col-5" style="background-color: whitesmoke;">
+                <!-- Datos del vendedor y titulo del producto -->
+                <h1 style="padding:1em 0em 1em 0em;">{{product.name}}</h1>
+                <h3 style="color:#053a68"><b>Értékelés:</b>
+                    <div style="padding-left: 1.4em;">
+                        <div *ngIf="product?.rating.counter === 0; else elseRating">
+                            Még nem értékelt
+                        </div>
+                        <ng-template #elseRating>
+                            <div style="font-size: larger;">
+                                <ngb-rating [readonly]="true" [max]="5" [rate]="product?.rating.value"> </ngb-rating>
+                                ({{product?.rating.value}})
+                            </div>
+                            <pre>(<b>{{product?.rating.counter}}</b> értékelés alapján)</pre>
+                        </ng-template>
+                    </div>
+                </h3>
+                <h3 style="color:#053a68"><b>Kategória:</b>
+                    <div style="padding-left: 1.4em;">{{product.category.categoryName}}</div>
+                </h3>
+                <h3 style="color:#053a68"><b>Sport:</b>
+                    <div style="padding-left: 1.4em;">{{product.sportType.name}}</div>
+                </h3>
+                <!-- Precios -->
+                <h3 class="title-price"><b>Termék ára:</b></h3>
+                <h2 style="color: #053a68; padding-left: 1.4em;">{{product.price | currency:'HUF':"symbol":"3.1-2":"hu"}}
+                </h2>
+
+                <!-- Detalles especificos del producto -->
+                <div class="section" style="padding-bottom:20px; text-align: center;">
+                    <h3 class="title-attr">Mennyiség</h3>
+                    <button class="btn btn-primary btn-sm" (click)="decrementQuantity()">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <span style="padding:0em 2em 0em 2em;">{{quantity}}</span>
+                    <button class="btn btn-primary btn-sm" (click)="incrementQuantity()">
+                        <i class="fas fa-plus"></i>
+                    </button>
+
+                </div>
+                <!-- Botones de compra -->
+                <div class="section" style="text-align: center;">
+                    <div class="ref-button"><button class="btn btn-success yellow-btn" (click)="addToCart()">Kosárba<span class="fa fa-cart-plus"></span></button></div>
+                    <div class="ref-button"><a class="link" (click)="onCartClick()"><span
+                                class="fa fa-shopping-cart"></span> Kosara megtekintése</a></div>
+                    <div class="ref-button"><a class="link" routerLink="/products"><span
+                                class="fa fa-chevron-left"></span> Vásárlás folytatása</a></div>
+                </div>
+
+            </div>
+        </div>
+        <div style="width:100%;">
+
+            <h2>Termék Leírása:</h2>
+            <p style="padding:15px;">
+                {{product.description}}
+            </p>
+        </div>
+        <mat-divider style="padding-bottom: 20px;"></mat-divider>
+        <div class="col-12 col-sm-12 header">
+            <h1 class="comm-header"><i class="material-icons">forum</i> Hozzászólások ({{product.comments?.length}})
+            </h1>
+        </div>
+        <div class="card">
+            <div class="commentbox">
+                <div class="col-12 col-sm-12 body">
+                    <div class="comment-container">
+                        <div class="comment-form" *ngIf="isLoggedIn; else notLoggedIn">
+                            <form [formGroup]="commentForm" (ngSubmit)="onComment()">
+                                <div class="form-group">
+                                    <h2><em>Szeretné véleményét megosztani?</em></h2>
+                                    <h2>Értékelje:
+                                        <ngb-rating style="font-size: 2.2em;" formControlName="rate" [max]="5" [ngClass]="{ 'is-invalid': submitted && commentForm.controls['rate'].errors }">
+                                        </ngb-rating>
+                                        <div class="invalid-feedback" *ngIf="submitted && commentForm.controls['rate'].errors">
+                                            <div *ngIf="commentForm.controls['rate'].errors.required">Kérjük értékelje 1-5ig ezt a terméket</div>
+
+                                        </div>
+                                    </h2>
+                                    <h2>
+                                        <textarea class="form-control" placeholder="Szólj hozzá" formControlName="message" style="height: 7em;" [ngClass]="{ 'is-invalid': submitted && commentForm.controls['message'].errors }"></textarea>
+                                        <div class="invalid-feedback" *ngIf="submitted && commentForm.controls['message'].errors">
+                                            <div *ngIf="commentForm.controls['message'].errors.required">
+                                                Kérjük írja le véleményét</div>
+                                            <div *ngIf="commentForm.controls['message'].errors.minlength">
+                                                Legalább 6 karakter hosszú véleményt írjon
+                                            </div>
+                                        </div>
+                                    </h2>
+                                </div>
+                                <div class="form-group" style="text-align: right;">
+                                    <button type="submit" class="btn btn-success">Küldés <i
+                                            class="fa fa-share"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                        <ng-template #notLoggedIn>
+                            <h1 style="text-align: center;"><em>Véleményed <a routerLink="/login"> bejelentkezés</a>
+                                    után megoszhatod erről a termékről</em></h1>
+                        </ng-template>
+
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 body">
+                    <div class="comment-container">
+                        <div class="comment-form">
+                            <mat-card class="example-card" *ngFor="let comment of product.comments">
+                                <mat-card-header>
+                                    <div mat-card-avatar class="example-header-image"></div>
+                                    <mat-card-title>{{comment.commenter.firstName}} {{comment.commenter.lastName}}
+                                    </mat-card-title>
+                                    <mat-card-subtitle>elküldve: {{comment.created | date:'short':'+0100':'HU'}}
+                                    </mat-card-subtitle>
+                                </mat-card-header>
+                                <mat-card-content style="font-size: 1em">
+                                    <div style="padding-bottom: 1.4em;"><b>Értékelése:</b>
+                                        <ngb-rating style="font-size: 1.7em;" [rate]="comment.rate" [readonly]="true" [max]="5"> </ngb-rating>
+                                        ({{comment.rate}})
+                                    </div>
+                                    <b>Megjegyzése:</b> {{comment.text}}
+                                </mat-card-content>
+                                <mat-divider></mat-divider>
+                            </mat-card>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

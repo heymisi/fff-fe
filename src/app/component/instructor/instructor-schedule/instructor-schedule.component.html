@@ -1,0 +1,331 @@
+<p-toast position="center"></p-toast>
+<div class="idance">
+    <div class="schedule content-block">
+        <div class="container-fluid">
+            <div class="timetable">
+                <mat-tab-group color="primary" backgroundColor="primary">
+                    <mat-tab label="Hétfő">
+                        <div *ngIf="trainingSessionsByDays[0].length === 0;" class="day-not-working">
+                            <h1>Ezen a napon nincsenek elérhető órák</h1>
+                        </div>
+                        <div *ngIf="trainingSessionsByDays[0].length != 0;">
+                            <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
+                                <div class="tab-pane show active">
+                                    <div class="row">
+                                        <div class="col-md-6" *ngFor="let day of trainingSessionsByDays[0]">
+                                            <div class="timetable-item">
+                                                <div class="timetable-item-main">
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <h2> <span class="timetable-item-time" *ngIf="day.sessionStart >= 12">
+                                                                    du. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.sessionStart < 12">
+                                                                    de. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                            </h2>
+                                                        </div>
+                                                        <div class="col-md-7">
+                                                            <h2>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Csoportos edzés'">
+                                                                    {{day.trainingSessionType}} max
+                                                                    <b>{{day.maxClientNumber}}</b> fő
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Személyi edzés'">
+                                                                    {{day.trainingSessionType}}</span>
+                                                            </h2>
+                                                        </div>
+                                                    </div>
+                                                    <div class="timetable-item-name">
+                                                        {{day.name}}
+                                                    </div>
+                                                    <div class="timetable-item-name"><b>{{day.occasionPrice}}</b> Ft/alkalom vagy <b>{{day.monthlyPrice}}</b> Ft/hónap</div>
+                                                    <a class="btn btn-primary btn-book" (click)="addTrainingSession(day)">Jelentkezés</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Kedd">
+                        <div *ngIf="trainingSessionsByDays[1].length === 0;" class="day-not-working">
+                            <h1>Ezen a napon nincsenek elérhető órák</h1>
+                        </div>
+                        <div *ngIf="trainingSessionsByDays[1].length != 0; ">
+                            <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
+                                <div class="tab-pane show active">
+                                    <div class="row">
+                                        <div class="col-md-6" *ngFor="let day of trainingSessionsByDays[1]">
+                                            <div class="timetable-item">
+                                                <div class="timetable-item-main">
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <h2> <span class="timetable-item-time" *ngIf="day.sessionStart >= 12">
+                                                                    du. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.sessionStart < 12">
+                                                                    de. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                            </h2>
+                                                        </div>
+                                                        <div class="col-md-7">
+                                                            <h2>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Csoportos edzés'">
+                                                                    {{day.trainingSessionType}} max
+                                                                    <b>{{day.maxClientNumber}}</b> fő
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Személyi edzés'">
+                                                                    {{day.trainingSessionType}}</span>
+                                                            </h2>
+                                                        </div>
+                                                    </div>
+                                                    <div class="timetable-item-name">
+                                                        <b>{{day.name}}</b>
+                                                    </div>
+                                                    <div class="timetable-item-price"><b>{{day.occasionPrice}}</b> Ft/alkalom vagy <b>{{day.monthlyPrice}}</b> Ft/hónap</div>
+                                                    <a class="btn btn-primary btn-book" (click)="addTrainingSession(day)">Jelentkezés</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Szerda">
+                        <div *ngIf="trainingSessionsByDays[2].length === 0;" class="day-not-working">
+                            <h1>Ezen a napon nincsenek elérhető órák</h1>
+                        </div>
+                        <div *ngIf="trainingSessionsByDays[2].length != 0;">
+                            <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
+                                <div class="tab-pane show active">
+                                    <div class="row">
+                                        <div class="col-md-6" *ngFor="let day of trainingSessionsByDays[2]">
+                                            <div class="timetable-item">
+                                                <div class="timetable-item-main">
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <h2> <span class="timetable-item-time" *ngIf="day.sessionStart >= 12">
+                                                                    du. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.sessionStart < 12">
+                                                                    de. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                            </h2>
+                                                        </div>
+                                                        <div class="col-md-7">
+                                                            <h2>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Csoportos edzés'">
+                                                                    {{day.trainingSessionType}} max
+                                                                    <b>{{day.maxClientNumber}}</b> fő
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Személyi edzés'">
+                                                                    {{day.trainingSessionType}}</span>
+                                                            </h2>
+                                                        </div>
+                                                    </div>
+                                                    <div class="timetable-item-name">
+                                                        {{day.name}}
+                                                    </div>
+                                                    <div class="timetable-item-name"><b>{{day.occasionPrice}}</b> Ft/alkalom vagy <b>{{day.monthlyPrice}}</b> Ft/hónap</div>
+                                                    <a class="btn btn-primary btn-book" (click)="addTrainingSession(day)">Jelentkezés</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Csütörtök">
+                        <div *ngIf="trainingSessionsByDays[3].length === 0;" class="day-not-working">
+                            <h1>Ezen a napon nincsenek elérhető órák</h1>
+                        </div>
+                        <div *ngIf="trainingSessionsByDays[3].length != 0;">
+                            <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
+                                <div class="tab-pane show active">
+                                    <div class="row">
+                                        <div class="col-md-6" *ngFor="let day of trainingSessionsByDays[3]">
+                                            <div class="timetable-item">
+                                                <div class="timetable-item-main">
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <h2> <span class="timetable-item-time" *ngIf="day.sessionStart >= 12">
+                                                                    DU. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.sessionStart < 12">
+                                                                    DE. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                            </h2>
+                                                        </div>
+                                                        <div class="col-md-7">
+                                                            <h2>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Csoportos edzés'">
+                                                                    {{day.trainingSessionType}} max
+                                                                    <b>{{day.maxClientNumber}}</b> fő
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Személyi edzés'">
+                                                                    {{day.trainingSessionType}}</span>
+                                                            </h2>
+                                                        </div>
+                                                    </div>
+                                                    <div class="timetable-item-name">
+                                                        {{day.name}}
+                                                    </div>
+                                                    <div class="timetable-item-name"><b>{{day.occasionPrice}}</b> Ft/alkalom vagy <b>{{day.monthlyPrice}}</b> Ft/hónap</div>
+                                                    <a class="btn btn-primary btn-book" (click)="addTrainingSession(day)">Jelentkezés</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Péntek">
+                        <div *ngIf="trainingSessionsByDays[4].length === 0;" class="day-not-working">
+                            <h1>Ezen a napon nincsenek elérhető órák</h1>
+                        </div>
+                        <div *ngIf="trainingSessionsByDays[4].length != 0;">
+                            <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
+                                <div class="tab-pane show active">
+                                    <div class="row">
+                                        <div class="col-md-6" *ngFor="let day of trainingSessionsByDays[4]">
+                                            <div class="timetable-item">
+                                                <div class="timetable-item-main">
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <h2> <span class="timetable-item-time" *ngIf="day.sessionStart >= 12">
+                                                                    du. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.sessionStart < 12">
+                                                                    de. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                            </h2>
+                                                        </div>
+                                                        <div class="col-md-7">
+                                                            <h2>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Csoportos edzés'">
+                                                                    {{day.trainingSessionType}} max
+                                                                    <b>{{day.maxClientNumber}}</b> fő
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Személyi edzés'">
+                                                                    {{day.trainingSessionType}}</span>
+                                                            </h2>
+                                                        </div>
+                                                    </div>
+                                                    <div class="timetable-item-name">
+                                                        {{day.name}}
+                                                    </div>
+                                                    <div class="timetable-item-name"><b>{{day.occasionPrice}}</b> Ft/alkalom vagy <b>{{day.monthlyPrice}}</b> Ft/hónap</div>
+                                                    <a class="btn btn-primary btn-book" (click)="addTrainingSession(day)">Jelentkezés</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Szombat">
+                        <div *ngIf="trainingSessionsByDays[5].length === 0;" class="day-not-working">
+                            <h1>Ezen a napon nincsenek elérhető órák</h1>
+                        </div>
+                        <div *ngIf="trainingSessionsByDays[5].length != 0;">
+                            <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
+                                <div class="tab-pane show active">
+                                    <div class="row">
+                                        <div class="col-md-6" *ngFor="let day of trainingSessionsByDays[5]">
+                                            <div class="timetable-item">
+                                                <div class="timetable-item-main">
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <h2> <span class="timetable-item-time" *ngIf="day.sessionStart >= 12">
+                                                                    du. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.sessionStart < 12">
+                                                                    de. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                            </h2>
+                                                        </div>
+                                                        <div class="col-md-7">
+                                                            <h2>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Csoportos edzés'">
+                                                                    {{day.trainingSessionType}} max
+                                                                    <b>{{day.maxClientNumber}}</b> fő
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Személyi edzés'">
+                                                                    {{day.trainingSessionType}}</span>
+                                                            </h2>
+                                                        </div>
+                                                    </div>
+                                                    <div class="timetable-item-name">
+                                                        {{day.name}}
+                                                    </div>
+                                                    <div class="timetable-item-name"><b>{{day.occasionPrice}}</b> Ft/alkalom vagy <b>{{day.monthlyPrice}}</b> Ft/hónap</div>
+                                                    <a class="btn btn-primary btn-book" (click)="addTrainingSession(day)">Jelentkezés</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Vasárnap">
+                        <div *ngIf="trainingSessionsByDays[6].length === 0;" class="day-not-working">
+                            <h1>Ezen a napon nincsenek elérhető órák</h1>
+                        </div>
+                        <div *ngIf="trainingSessionsByDays[6].length != 0">
+                            <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
+                                <div class="tab-pane show active">
+                                    <div class="row">
+                                        <div class="col-md-6" *ngFor="let day of trainingSessionsByDays[6]">
+                                            <div class="timetable-item">
+                                                <div class="timetable-item-main">
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <h2> <span class="timetable-item-time" *ngIf="day.sessionStart >= 12">
+                                                                    du. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.sessionStart < 12">
+                                                                    de. {{day.sessionStart}}:00 - {{day.sessionEnd}}:00
+                                                                </span>
+                                                            </h2>
+                                                        </div>
+                                                        <div class="col-md-7">
+                                                            <h2>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Csoportos edzés'">
+                                                                    {{day.trainingSessionType}} max
+                                                                    <b>{{day.maxClientNumber}}</b> fő
+                                                                </span>
+                                                                <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Személyi edzés'">
+                                                                    {{day.trainingSessionType}}</span>
+                                                            </h2>
+                                                        </div>
+                                                    </div>
+                                                    <div class="timetable-item-name">
+                                                        {{day.name}}
+                                                    </div>
+                                                    <div class="timetable-item-name"><b>{{day.occasionPrice}}</b> Ft/alkalom vagy <b>{{day.monthlyPrice}}</b> Ft/hónap</div>
+                                                    <a class="btn btn-primary btn-book" (click)="addTrainingSession(day)">Jelentkezés</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+    </div>
+</div>
+<p-confirmDialog #cd [style]="{width: '450px'}">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-check" label="Rendben" (click)="cd.accept()"></button>
+    </p-footer>
+</p-confirmDialog>

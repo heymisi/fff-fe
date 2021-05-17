@@ -1,0 +1,26 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
+.example-section {
+    margin: 0px 0;
+}
+
+.example-margin {
+    margin: 0 12px;
+}
+
+ul {
+    list-style-type: none;
+    margin-top: 4px;
+}
+
+mat-card-content {
+    overflow: hidden;
+}
+
+mat-card {
+    width: 100%;
+}
+
+.filter_btn {
+    color: black;
+    border: 2px solid #205b8d;
+}

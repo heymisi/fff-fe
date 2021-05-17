@@ -1,0 +1,146 @@
+<div class="main-content" style="background-color: white;">
+    <div class="section-content section-content-p30" *ngIf="!progressBarVisible">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 side">
+
+                    <!-- Search Widget -->
+                    <form [formGroup]="facilityFormGroup">
+                        <div formGroupName="search">
+                            <div class="card my-4">
+                                <h2 class="card-header">Keresés név alapján</h2>
+                                <div class="card-body">
+                                    <div class="input-group">
+                                        <input #searchNameinput type="text" class="form-control" placeholder="Keress sportlétesítményeink között.." formControlName="name">
+                                        <span class="input-group-append">
+                                            <button class="search-butt" type="button" (click)="listFacilites()">Keres
+                                                <span class="fa fa-search"></span></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card my-4">
+                                <h2 class="card-header">Keresés lakhelye alapján</h2>
+                                <div class="card-body">
+                                    <div class="input-group">
+                                        <input #searchCityInput type="text" class="form-control" placeholder="Keress sportlétesítményeink között.." [matAutocomplete]="auto" formControlName="city">
+                                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                            <mat-option *ngFor="let city of filteredCities | async" [value]="city">
+                                                {{ city }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <span class="input-group-append">
+                                            <button class="search-butt" type="button" (click)="listFacilites()">Keres
+                                                <span class="fa fa-search"></span></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="card my-4">
+                        <h2 class="card-header">Kategória szerint</h2>
+                        <div class="card-body">
+                            <h2>Sport <span class="material-icons">
+                                    sports_soccer
+                                </span></h2>
+                            <ul class="list-unstyled mb-0" *ngFor="let sport of sports">
+                                <li style="padding-left: 20px;">
+                                    <a class="sport-link" (click)="handleFacilitySportFilter(sport)" style="font-size: larger;padding-bottom: 10px;"> {{sport.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blog Entries Column -->
+                <div class="col-md-9">
+                    <div class="p-4 p-md-12 mb-4 text-white rounded" style="background-color: #205b8d;">
+                        <div class="col-md-6 px-0">
+                            <h1 class="display-4 fst-italic" style="color: antiquewhite;">Böngésszen Sportlétesítményeink között!
+                            </h1>
+                            <p class="lead my-3">({{totalElements}} elérhető)</p>
+                            <p class="lead my-3">Keresse meg a számára legideálisabb létesítményeket sporttevékenysége végzéséhez.
+                            </p>
+                        </div>
+                    </div>
+                    <div *ngIf="facilites?.length == 0" style="padding-top: 50px; text-align: center;" class="align-items-center">
+                        <h1><em>Nincs elérhető Sportlétesítmény</em></h1>
+                    </div>
+
+                    <div *ngIf="facilites?.length != 0">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 " style="text-align: left;">
+                                <span class="mr-auto">Megjelenítés</span>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>{{pageSize}} / oldal</mat-label>
+                                    <mat-select [(value)]="selectedPageSize" (selectionChange)="updatePageSize(selectedPageSize)">
+                                        <mat-option selected value="9">9 / oldal</mat-option>
+                                        <mat-option value="18">18 / oldal</mat-option>
+                                        <mat-option value="45">45 / oldal</mat-option>
+                                        <mat-option value="90">90 / oldal</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
+                                <div class="row">
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6">
+                                        <ngb-pagination [(page)]="pageNumber" [pageSize]="pageSize" [collectionSize]="totalElements" [maxSize]="4" [boundaryLinks]="true" (pageChange)="listFacilites()">
+                                        </ngb-pagination>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-4" *ngFor="let facility of facilites">
+                            <a routerLink="/facilities/{{facility.id}}"><img class="card-img-top" src={{facility.profileImageString}} alt="Card image cap"></a>
+                            <div class="card-body">
+                                <h1 class="card-title"><b>{{facility?.name}}</b></h1>
+                                <h2><b>Címe:</b> {{facility.address.city.cityName}}, {{facility.address.street}}
+                                </h2>
+                                <div *ngIf="!facility.isOpenNow; else elseBlock">
+                                    <h3 style="color: red;"><b>Jelenleg Zárva</b></h3>
+                                </div>
+                                <ng-template #elseBlock>
+                                    <h3 style="color:green"><b>Jelenleg Nyitva</b></h3>
+                                </ng-template>
+                                <h3></h3>
+                                <div class="card-text">
+                                    <h2>Elérhetőségek:</h2>
+                                    <h3><b>Email:</b> {{facility.contactData.email}}</h3>
+                                    <h3><b>Tel:</b> (+36) {{facility.contactData.telNumber}}</h3>
+
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <a routerLink="/facilities/{{facility.id}}" class="btn btn-primary">További
+                                    információk&rarr;</a>
+
+                            </div>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="footer-pagination">
+                            <div class="row">
+                                <div class="col-md-6"></div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-9" style="padding-left:30%">
+                                            <ngb-pagination [(page)]="pageNumber" [pageSize]="pageSize" [collectionSize]="totalElements" [maxSize]="4" [boundaryLinks]="true" (pageChange)="listFacilites()">
+                                            </ngb-pagination>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="loading-indicator" *ngIf="progressBarVisible">
+    <mat-progress-spinner style="margin:0 auto;" mode="indeterminate">
+    </mat-progress-spinner>
+</div>

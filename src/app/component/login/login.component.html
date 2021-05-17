@@ -1,0 +1,69 @@
+<p-toast position="center"></p-toast>
+
+<div class="main-content">
+    <div class="container">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card">
+                <div class="card-header">
+                    <h1><b>Jelentkezzen be!</b></h1>
+
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="checkoutFormGroup" (submit)="onLogin()">
+                        <div formGroupName="login">
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" style="color: white;"><i
+											class="material-icons">local_post_office</i>
+										<i class="strict">*</i></span>
+                                </div>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Email cím</mat-label>
+                                    <input formControlName="email" matInput placeholder="pelda@gmail.com">
+                                    <mat-error>
+                                        <div *ngIf="email.invalid && (email.dirty || email.touched)">
+                                            <ng-container *ngFor="let error of errors(email)">
+                                                {{ errorMessagesEmail[error] }}
+                                            </ng-container>
+                                        </div>
+                                    </mat-error>
+
+                                </mat-form-field>
+                            </div>
+
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" style="color: white;"><i class="fas fa-key"><i
+												class="strict"></i></i></span>
+                                </div>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Jelszó</mat-label>
+                                    <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+                                    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
+                                    </mat-icon>
+                                    <mat-error *ngIf="password.hasError('required')">Kérjük adja meg jelszavát!
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn float-right login_btn">
+								<b>Bejelentkezés</b>
+								<i class="material-icons">login</i>
+							</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-center links">
+                        Még nem rendelkezik fiókkal?<a routerLink="/register">Regisztráljon be!</a>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <a routerLink="/password-reset-request">Elfelejtette jelszavát?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

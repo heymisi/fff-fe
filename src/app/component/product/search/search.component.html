@@ -1,0 +1,6 @@
+<div class="form-header">
+    <button (click)="doSearch(searchInput.value)" class="au-btn-submit" type="submit">
+        <span class="fa fa-search"></span> Keresés
+    </button>
+    <input #searchInput type="text" class="au-input au-input-xl" type="text" name="search" placeholder="Keressen termékeink között ..." (keyup.enter)="doSearch(searchInput.value)" />
+</div>

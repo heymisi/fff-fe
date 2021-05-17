@@ -1,0 +1,270 @@
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<p-toast position="center"></p-toast>
+
+<body>
+    <div class="main-content">
+        <!-- Page content -->
+        <div class="container-fluid mt--7" style="padding-top: 100px;">
+            <div class="row">
+                <div class="col-xl-3 order-xl-1  bg-gradient-primary">
+                    <div class="menu-sidebar-content js-scrollbar1" style="overflow:auto;">
+                        <nav class="navbar-sidebar">
+                            <div class="align-items-center text-center" style="padding-top: 20px;">
+                                <h1 style="color:white;" class="text-center">EDZŐI FIÓK</h1>
+                                <h2 style="color: wheat;"><em>{{user.firstName}} {{user.lastName}}</em></h2>
+                            </div>
+                            <ul class="navbar-nav  sidebar-dark" style=" overflow-y:auto;">
+                                <hr class="sidebar-divider my-0">
+
+                                <!-- Sidebar - Brand -->
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/instructor/profile">
+                                        <span class="fa fa-user-circle" style="font-size: 1.3em;cursor:pointer">
+                                            Személyes adatok</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/instructor/profile/instr-data">
+                                        <span style="font-size: 1.3em;cursor:pointer"><span class="material-icons">
+                                                supervised_user_circle
+                                            </span> Edzői adatok</span>
+                                    </a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/instructor/profile/training-sessions">
+                                        <span style="font-size: 1.3em;cursor:pointer"><span class="material-icons">
+                                                directions_run
+                                            </span> Edzéseim</span>
+                                    </a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+                                <!-- Nav Item - Tables -->
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em; cursor: pointer;">
+                                    <a class="nav-link" (click)="logout()">
+                                        <span class="bi bi-chevron-bar-right" style="font-size: 1.3em;cursor:pointer">
+                                            Kilépés</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+                                <!-- Divider -->
+                                <hr class="sidebar-divider d-none d-md-block">
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+                <div class="col-xl-9 order-xl-2 mb-5 mb-xl-0">
+                    <div class="card bg-secondary shadow">
+                        <div class="card-header bg-white border-0">
+
+                            <div class="text-center">
+                                <h1 class="mb-0"><b>Edzéseim</b></h1>
+                            </div>
+                            <a class="btn btn-primary btn-book" (click)="addSessionDialogOpen()" style="color:white; background-color: green;">Új edzés hozzáadás <i class="fa fa-plus"
+                                    aria-hidden="true"></i>
+                            </a>
+                            <div class="card-body">
+                                <div class="idance">
+                                    <div class="schedule content-block">
+                                        <div class="container-fluid">
+                                            <div class="timetable">
+                                                <mat-tab-group color="primary" backgroundColor="primary">
+                                                    <mat-tab *ngFor="let day of weekDays" [label]="day.day" style="width: 100%;">
+                                                        <div class="tab-content" style="padding-bottom: 2em; overflow: hidden;">
+                                                            <div class="tab-pane show active">
+                                                                <div *ngIf="day.counter == 0" class="text-center" style="padding-top:4em;">
+                                                                    <h2>Ezen a napon nincsenek edzéseim</h2>
+                                                                </div>
+                                                                <ng-container *ngIf="day.counter != 0">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6" *ngFor="let session of day.value">
+                                                                            <div class="timetable-item">
+                                                                                <div class="timetable-item-main">
+                                                                                    <h2> <span class="timetable-item-time" *ngIf="session.sessionStart >= 12">
+                                                                                            du.
+                                                                                            {{session.sessionStart}}:00
+                                                                                            -
+                                                                                            {{session.sessionEnd}}:00
+                                                                                        </span>
+                                                                                        <span class="timetable-item-time" *ngIf="session.sessionStart < 12">
+                                                                                            de.
+                                                                                            {{session.sessionStart}}:00
+                                                                                            -
+                                                                                            {{session.sessionEnd}}:00
+                                                                                        </span>
+                                                                                    </h2>
+                                                                                    <div class="timetable-item-time">
+                                                                                        {{session.name}} &emsp;&ensp;
+                                                                                        <span class="timetable-item-name" *ngIf="session.trainingSessionType === 'Csoportos edzés'">
+                                                                                            ({{session.trainingSessionType}}
+                                                                                            - létszám:
+                                                                                            {{session.maxClientNumber}}/{{session.client.length}})
+                                                                                        </span>
+                                                                                        <span class="timetable-item-name" *ngIf="session.trainingSessionType === 'Személyi edzés'">
+                                                                                            ({{session.trainingSessionType}})</span>
+
+                                                                                    </div>
+                                                                                    <div *ngIf="session.client.length != 0; else elseBlock">
+                                                                                        <div class="timetable-item-time">
+                                                                                            Kliens(ek):
+                                                                                        </div>
+                                                                                        <div class="timetable-item-name" *ngFor="let user of session.client">
+                                                                                            <div class="row">
+                                                                                                <div class="col-4">
+                                                                                                    {{user.firstName}} {{user.lastName}}
+                                                                                                </div>
+                                                                                                <div class="col-3">
+                                                                                                    {{user.contactData?.telNumber}}
+                                                                                                </div>
+                                                                                                <div class="col-5">
+                                                                                                    {{user.contactData?.email}}
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <mat-divider>
+                                                                                            </mat-divider>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <ng-template #elseBlock>
+                                                                                        <div class="timetable-item-name" style="color:green">Ez az időpont még szabadon foglalható kliens(ek) számára
+                                                                                        </div>
+                                                                                    </ng-template>
+                                                                                    <a class="btn btn-primary btn-book" (click)="deleteTrainingSession(session)" style="color:white">Törlés</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </ng-container>
+                                                            </div>
+                                                        </div>
+                                                    </mat-tab>
+                                                </mat-tab-group>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<p-confirmDialog #cd [style]="{width: '450px'}">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-times" label="Mégsem" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa fa-check" label="Igen" (click)="cd.accept()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-dialog [(visible)]="addDialog" [style]="{width: '800px'}" [modal]="true" styleClass="p-fluid">
+    <h1>Új edzés időpont hozzáadása</h1>
+    <ng-template pTemplate="content">
+        <form [formGroup]="sessionFormGroup">
+            <div class="p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <b><label for="name">Melyik nap?</label></b>
+                    <p-dropdown [options]="weekDays" optionLabel="day" [ngModel]="weekDays[0].day" optionValue="day" formControlName="weekDay"></p-dropdown>
+                    <div *ngIf="weekDay.invalid && (weekDay.dirty || weekDay.touched)" class="alert alert-danger mt-1">
+                        <div *ngIf="weekDay.errors.required">
+                            <small class="p-error">Válassz napot!</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col">
+                    <b><label for="name">Edzés kezdete (óra)</label></b>
+                    <p-inputNumber [minFractionDigits]="0" [ngModel]="0" formControlName="sessionStart"></p-inputNumber>
+                    <div *ngIf="sessionStart.invalid && (sessionStart.dirty || sessionStart.touched)" class="alert alert-danger mt-1">
+                        <div *ngIf="sessionStart.errors.required">
+                            <small class="p-error">Adja meg az edzés kezdetének idejét!</small>
+                        </div>
+                        <div *ngIf="sessionStart.errors.min|| sessionStart.errors.max">
+                            <small class="p-error">0-23 közötti érték adható meg</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col">
+                    <b><label for="name">Edzés vége (óra)</label></b>
+                    <p-inputNumber [minFractionDigits]="0" [ngModel]="0" formControlName="sessionEnd"></p-inputNumber>
+                    <div *ngIf="sessionEnd.invalid && (sessionEnd.dirty || sessionEnd.touched)" class="alert alert-danger mt-1">
+                        <div *ngIf="sessionEnd.errors.required">
+                            <small class="p-error">Adja meg az edzés végének idejét!</small>
+                        </div>
+                        <div *ngIf="sessionEnd.errors.min || sessionEnd.errors.max">
+                            <small class="p-error">0-23 közötti érték adható meg</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <b><label for="name">Edzés neve</label></b>
+                    <input type="text" pInputText formControlName="name" />
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger mt-1">
+                        <div *ngIf="name.errors.required">
+                            <small class="p-error">Adja meg az edzés nevét!</small>
+                        </div>
+                        <div *ngIf="name.errors.minlength">
+                            <small class="p-error">Legalább 4 karakter legyen!</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col">
+                    <b><label for="name">Edzés fajtája</label></b>
+                    <p-dropdown [options]="sessionTypes" [ngModel]="sessionTypes[0]" formControlName="type">
+                    </p-dropdown>
+                    <div *ngIf="type.invalid && (type.dirty || type.touched)" class="alert alert-danger mt-1">
+                        <small class="p-error">Adja meg az edzés fajtáját!</small>
+                    </div>
+                </div>
+            </div>
+            <div class="p-formgrid p-grid">
+                <div class="p-field p-col">
+                </div>
+                <div class="p-field p-col">
+                    <b><label for="name">Hányan vehetnek részt?(Ha csoportos edzés)</label></b>
+                    <p-inputNumber [minFractionDigits]="0" [ngModel]="1" formControlName="clientNumber"></p-inputNumber>
+
+                </div>
+            </div>
+            <div class="p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <b><label for="name">Edzés ára/alkalom</label></b>
+                    <p-inputNumber mode="currency" [ngModel]="0" currency="HUF" locale="hu-HU" [minFractionDigits]="0" formControlName="occasionPrice"></p-inputNumber>
+                    <div *ngIf="occasionPrice.invalid && (occasionPrice.dirty || occasionPrice.touched)" class="alert alert-danger mt-1">
+                        <div *ngIf="occasionPrice.errors.required">
+                            <small class="p-error">Adja meg az edzés alkalmi árát!</small>
+                        </div>
+                        <div *ngIf="occasionPrice.errors.min">
+                            <small class="p-error">Az ár nullánál nagyobb kell legyen!</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col">
+                    <b><label for="name">Edzés ára/hónap</label></b>
+                    <p-inputNumber mode="currency" [ngModel]="0" currency="HUF" locale="hu-HU" [minFractionDigits]="0" formControlName="monthlyPrice"></p-inputNumber>
+                    <div *ngIf="monthlyPrice.invalid && (monthlyPrice.dirty || monthlyPrice.touched)" class="alert alert-danger mt-1">
+                        <div *ngIf="monthlyPrice.errors.required">
+                            <small class="p-error">Adja meg az edzés havi árát!</small>
+                        </div>
+                        <div *ngIf="monthlyPrice.errors.min">
+                            <small class="p-error">Az ár nullánál nagyobb kell legyen!</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Elvetés" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple id="saveButt" label="Mentés" icon="pi pi-check" class="p-button-text" (click)="addSession()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog key="logoutDialog" #cd2 [style]="{width: '450px'}">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-times" label="Mégsem" (click)="cd2.reject()"></button>
+        <button type="button" pButton icon="fa fa-check" label="Kijelentkezek" (click)="cd2.accept()"></button>
+    </p-footer>
+</p-confirmDialog>

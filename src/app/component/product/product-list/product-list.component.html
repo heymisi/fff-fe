@@ -1,0 +1,143 @@
+<aside class="side-menu-category d-none d-lg-block">
+    <app-product-category-menu (filteredClick)="onFiltered($event)"></app-product-category-menu>
+</aside>
+<div class="content" style="background-color: whitesmoke; padding-left: 250px;" *ngIf="!progressBarVisible">
+
+    <div class="p-4 p-md-12 mb-4 text-white rounded" style="background-color: #205b8d;">
+        <div class="row">
+            <div class="col-md-7 px-0">
+                <h1 class="display-4 fst-italic" style="color: antiquewhite;">Böngésszen termékeink között!</h1>
+                <p class="lead my-3">({{totalElements}} elérhető)</p>
+                <p class="lead my-3">Széles palettán mozogva kínálunk sporthoz köthető termékeket, kiváló ár érték arányú kínálatunkban biztos megtalálja a számára legmegfelelőbbet.</p>
+            </div>
+            <div class="col-md-5 px-0" style="text-align: right;">
+                <app-cart-status></app-cart-status>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="products?.length == 0" style="padding-top: 50px; text-align: center;" class="align-items-center">
+        <h1><em>Nincs elérhető termék</em></h1>
+    </div>
+    <div *ngIf="products?.length != 0">
+
+        <div class="row align-items-center">
+            <div class="col-md-9">
+                <app-search></app-search>
+            </div>
+            <div class="col-md-3" style="text-align: right;">
+            </div>
+        </div>
+
+        <div class="row align-items-center">
+            <div class="col-md-3">
+                <mat-form-field appearance="outline" class="order">
+                    <mat-label><i class="fa fa-sort" aria-hidden="true"></i> Rendezés </mat-label>
+                    <mat-select [(value)]="selectedSort" (selectionChange)="sortPage()">
+                        <mat-option value="newest">Újdonságok előre</mat-option>
+                        <mat-option value="byRate">Értékelés szerint</mat-option>
+                        <mat-option value="priceForward">Ár szerint növekvő</mat-option>
+                        <mat-option value="priceBackward">Ár szerint csökkenő </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </div>
+            <div class="col-md-9">
+                <div class="row align-items-center">
+                    <div class="col-md-6 " style="text-align: right;">
+                        <span class="mr-auto">Megjelenítés</span>
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>{{pageSize}} / oldal</mat-label>
+                            <mat-select [(value)]="selectedPageSize" (selectionChange)="updatePageSize(selectedPageSize)">
+                                <mat-option selected value="9">9 / oldal</mat-option>
+                                <mat-option value="18">18 / oldal</mat-option>
+                                <mat-option value="45">45 / oldal</mat-option>
+                                <mat-option value="90">90 / oldal</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6 ">
+                        <ngb-pagination [(page)]="pageNumber" [pageSize]="pageSize" [collectionSize]="totalElements" [maxSize]="4" [boundaryLinks]="true" (pageChange)="listProducts()">
+                        </ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="main-content" style="padding-top: 0%; padding-left: 250px;">
+
+    <div class="section-content section-content-p30">
+
+        <div class="container-fluid">
+
+            <div *ngIf="products?.length != 0">
+
+                <div class="row">
+                    <div *ngFor="let tempProduct of products" class="col-lg-4 col-md-6 mb-4">
+
+
+                        <div class="card h-100">
+                            <a routerLink="//products/{{tempProduct.id}}"><img class="card-img-top p-shadow-4" src={{tempProduct.imageString}} width="700" height="400" alt=""></a>
+                            <div class="card-body">
+                                <h2 class="card-title">
+                                    <a routerLink="/products/{{tempProduct.id}}">{{tempProduct.name}}</a>
+                                </h2>
+                                <h3 class="price">Ára: {{tempProduct.price | currency:'HUF':"symbol":"3.1-2":"hu"}}</h3>
+                                <p class="card-text">Rövid leírás: {{tempProduct.description}}</p>
+                            </div>
+                            <div class="card-footer">
+
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="text-muted" style="font-size: large;">
+                                            <div *ngIf="tempProduct.rating.counter === 0; else elseBlock">
+                                                Még nem értékelt
+                                            </div>
+                                            <ng-template #elseBlock>
+                                                <ngb-rating style="font-size: 1.6em;" [readonly]="true" [max]="5" [rate]=tempProduct.rating.value>
+                                                </ngb-rating>
+                                            </ng-template>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7" style="text-align: right;">
+                                        <button routerLink="/products/{{tempProduct.id}}" class="btn btn-primary btn-sm blue-btn" style="text-align: right;">Bővebb
+                                            info <span class="fa fa-angle-double-right"></span></button>
+                                        <button (click)="addToCart(tempProduct)" class="btn btn-primary btn-sm yellow-btn" style="text-align: right;"><b>Kosárba</b> <span
+                                                class="fa fa-cart-plus"></span></button>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- begin pagination-->
+                <div class="footer-pagination">
+                    <div class="row">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-9" style="padding-left:30%">
+
+                                    <ngb-pagination [(page)]="pageNumber" [pageSize]="pageSize" [collectionSize]="totalElements" [maxSize]="4" [boundaryLinks]="true" (pageChange)="listProducts()">
+
+                                    </ngb-pagination>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loading-indicator" *ngIf="progressBarVisible">
+    <mat-progress-spinner style="margin:0 auto;" mode="indeterminate">
+    </mat-progress-spinner>
+</div>

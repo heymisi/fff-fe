@@ -1,0 +1,52 @@
+<div class="main-content">
+    <div class="container">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card">
+                <div class="card-header">
+                    <h1>Lépjen Kapcsolatba velünk!</h1>
+                    <h2>Véleménye, észrevétele, esetleg továbbfejlesztési ötlete van oldalunkkal kapcsolatba?</h2>
+                    <h2>Az alábbiak egyikén megteheti:</h2>
+                    <div style="padding-left: 20px;">
+                        <h3><b>Tel:</b> (36) 70-2175709 &emsp;&emsp; <b>Mail:</b> heymisi99@gmail.com</h3>
+                    </div>
+                    <h2>Vagy ossza meg velünk itt!</h2>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="aboutUsFormGroup">
+                        <div class="comment-container">
+                            <div class="comment-form">
+                                <div class="form-group">
+                                    <textarea class="form-control" placeholder="Email címe" style="height: 50px;" formControlName="email" [ngClass]="{ 'is-invalid': submitted && aboutUsFormGroup.controls['email'].errors }"></textarea>
+                                    <div class="invalid-feedback" *ngIf="submitted && aboutUsFormGroup.controls['email'].errors">
+                                        <div *ngIf="aboutUsFormGroup.controls['email'].errors.pattern">Helyes email formátum adjon meg(pl: pelda@gmail.com)!</div>
+                                        <div *ngIf="aboutUsFormGroup.controls['email'].errors.required">Kérjük ne hagyja üresen!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment-container">
+                            <div class="comment-form">
+                                <div class="form-group">
+                                    <textarea class="form-control" placeholder="Írja ide észrevételét" formControlName="message" style="height: 220px;" [ngClass]="{ 'is-invalid': submitted && aboutUsFormGroup.controls['message'].errors }"></textarea>
+                                    <div class="invalid-feedback" *ngIf="submitted && aboutUsFormGroup.controls['message'].errors">
+                                        <div *ngIf="aboutUsFormGroup.controls['message'].errors.required">Kérjük ne hagyja üresen!</div>
+                                        <div *ngIf="aboutUsFormGroup.controls['message'].errors.minlength">Legalább 6 karakter hosszú legyen!</div>
+                                        <div *ngIf="aboutUsFormGroup.controls['message'].errors.maxlength">Maximum 200 karakter hosszú legyen!</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn float-right login_btn" (click)="onSubmit()">
+                                Küldés
+                                <i class="fa fa-share"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p-toast position="center"></p-toast>

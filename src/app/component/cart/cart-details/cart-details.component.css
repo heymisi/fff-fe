@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+ ::ng-deep .mat-horizontal-stepper-header {
+    pointer-events: none !important;
+}
+
+.mat-stepper-horizontal {
+    margin-top: 8px;
+}
+
+body {
+    background-color: #eeeeee;
+    font-family: 'Open Sans', serif;
+    font-size: 14px
+}
+
+.container-fluid {
+    margin-top: 70px
+}
+
+.card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.40rem
+}
+
+.img-sm {
+    width: 150px;
+    height: 150px
+}
+
+.itemside .info {
+    padding-left: 15px;
+    padding-right: 7px
+}
+
+.table-shopping-cart .price-wrap {
+    line-height: 1.2
+}
+
+.table-shopping-cart .price {
+    font-weight: bold;
+    margin-right: 5px;
+    display: block
+}
+
+.text-muted {
+    font-size: 1.1em;
+    color: #330000 !important
+}
+
+a {
+    text-decoration: none !important
+}
+
+.card {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 0px
+}
+
+.itemside {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%
+}
+
+.dlist-align {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+}
+
+[class*="dlist-"] {
+    margin-bottom: 5px
+}
+
+.coupon {
+    border-radius: 1px
+}
+
+.delivery-fee {
+    color: green;
+}
+
+.price {
+    font-size: larger;
+    font-weight: 600;
+    color: #212529
+}
+
+.btn.btn-out {
+    outline: 1px solid #fff;
+    outline-offset: -5px
+}
+
+.btn-main {
+    border-radius: 2px;
+    text-transform: capitalize;
+    font-size: 15px;
+    padding: 10px 19px;
+    cursor: pointer;
+    color: #fff;
+    width: 100%
+}
+
+.btn-light {
+    color: #ffffff;
+    background-color: #F44336;
+    border-color: #f8f9fa;
+    font-size: 16px
+}
+
+.btn-light:hover {
+    color: #ffffff;
+    background-color: #F44336;
+    border-color: #F44336
+}
+
+.btn-apply {
+    font-size: 11px
+}
+
+.btn {
+    font-size: larger;
+}
+
+.blue-btn {
+    color: white;
+    background-color: #205b8d;
+}
+
+.mat-form-field {
+    height: 2em;
+    width: 15em;
+}
+
+.personal-data-button {
+    width: 10em;
+}
+
+label {
+    font-size: larger;
+    text-align: center;
+}
+
+input {
+    width: 100%;
+}
+
+.inp-mask {
+    width: 100%;
+}
+
+ :host .input-mask {
+    width: 10px;
+    text-align: center;
+}
+
+.yourclass {
+    width: 100% !important;
+    background-color: green;
+}
+
+.p-error {
+    font-size: larger;
+}
+
+
+/* Absolute Center Spinner */
+
+.loading-indicator {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}

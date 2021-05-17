@@ -1,0 +1,19 @@
+.card {
+    margin-top: auto;
+    margin-bottom: auto;
+    justify-content: center;
+    width: 900px;
+    background-color: #ECFCFD !important;
+}
+
+.card-header {
+    background-color: white !important;
+}
+
+.mat-form-field {
+    width: 800px;
+}
+
+.main-content {
+    background: url("/assets/images/loginn.jpg") no-repeat center center;
+}

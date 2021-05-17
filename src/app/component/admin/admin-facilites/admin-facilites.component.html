@@ -1,0 +1,375 @@
+<p-toast position="center"></p-toast>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Sportlétesítmények</h1>
+                    <p class="mb-4">Aktuális adataink a Sportlétesítményekről, amelyekhez szabadon hozzáadhat újat, módosíthat, vagy akár törölhet.
+                    </p>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <p-table #dt dataKey="id" [value]="facilites" class="p-datatable-customers" id="dataTable" [(selection)]="selectedFacility" cellspacing="0" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" [(first)]="first" currentPageReportTemplate="Mutat {first}-{last}-ig {totalRecords}-ból"
+                                    [rowsPerPageOptions]="[10,25,50]" [loading]="loading" [globalFilterFields]="['name']" (onPage)="scrollUp()">
+                                    <ng-template pTemplate="caption">
+                                        <div class="p-d-flex">
+                                            <button pButton pRipple label="Új" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="openNew()"></button>
+                                            <button pButton pRipple label="Kiválasztottak Törlése" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedFacility()" [disabled]="!selectedFacility || !selectedFacility.length"></button>
+                                            <div class="p-d-flex p-ai-center p-jc-between" style="padding-left:20px;">
+                                                Összesen {{facilites ? facilites.length : 0 }} Sportlétesítmény érhető el.
+                                            </div>
+                                            <span class="p-input-icon-left p-ml-auto">
+                                                <i class="pi pi-search"></i>
+                                                <input pInputText type="text"
+                                                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                                    placeholder="Keresés név alapján" />
+                                            </span>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="width: 3rem">
+                                            </th>
+
+                                            <th style="width: 300px">Kép </th>
+                                            <th pSortableColumn="name">Létesítmény neve
+                                                <p-sortIcon field="name">
+                                                </p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="address.city.cityName">Cím
+                                                <p-sortIcon field="address.city.cityName">
+                                                </p-sortIcon>
+                                            </th>
+                                            <th>Email</th>
+                                            <th style="width: 9rem">Tel. szám</th>
+                                            <th>Elérhető sportok</th>
+                                            <th>Oktatók</th>
+                                            <th style="width: 3rem"></th>
+                                            <th style="width: 3rem">
+                                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                            </th>
+
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-fac let-expanded="expanded">
+                                        <tr>
+                                            <td>
+                                                <button type="button" pButton pRipple [pRowToggler]="fac" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                            </td>
+
+                                            <td style="width: 200px; height: 200px;"><img src={{fac.profileImageString}} class="p-shadow-4" /></td>
+                                            <td>{{fac.name}}</td>
+                                            <td> {{fac.address.city.cityName}}, {{fac.address.street}}
+                                            </td>
+                                            <td>
+                                                {{fac.contactData?.email}}</td>
+                                            <td>{{fac.contactData?.telNumber}}</td>
+                                            <td>
+                                                <span *ngFor="let sport of fac.availableSports">
+                                                    <div>{{sport.name}}</div>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span *ngIf="fac.instructors.length != 0;else elseInstructors">
+                                                    <span *ngFor="let instructor of fac?.instructors">
+                                                        <div>{{instructor.user?.firstName}}
+                                                            {{instructor.user?.lastName}}</div>
+                                                    </span>
+                                                </span>
+                                                <ng-template #elseInstructors>
+                                                    <em> Nincs a létesítményhez kapcsolodó oktató</em>
+                                                </ng-template>
+
+                                            </td>
+                                            <td>
+                                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editFacility(fac)"></button>
+                                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteFacility(fac)"></button>
+                                            </td>
+                                            <td style="width: 3rem">
+                                                <p-tableCheckbox [value]="fac"></p-tableCheckbox>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="rowexpansion" let-facility>
+                                        <tr>
+                                            <td colspan="10">
+                                                <h2>Leírás:</h2>
+                                                <div style="padding-bottom: 15px;"> {{facility.description}}</div>
+                                                <h2>Nyitvatartási idő:</h2>
+
+                                                <div class="p-p-3">
+                                                    <p-table [value]="facility.openingHours">
+                                                        <ng-template pTemplate="header">
+                                                            <tr>
+                                                                <th>Nap</th>
+                                                                <th>Nyitás</th>
+                                                                <th>Zárás</th>
+                                                            </tr>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="body" let-openingHour>
+                                                            <tr>
+                                                                <td>{{openingHour.day}}</td>
+                                                                <td>{{openingHour.openTime}} óra</td>
+                                                                <td>{{openingHour.closeTime}} óra</td>
+
+                                                            </tr>
+                                                        </ng-template>
+                                                    </p-table>
+                                                    <h2>Díjszabás:</h2>
+                                                    <p-table [value]="facility.pricing">
+                                                        <ng-template pTemplate="header">
+                                                            <th>Korosztály</th>
+                                                            <th>Napi jegy ár</th>
+                                                            <th>Bérlet ár</th>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="body" let-pricing>
+                                                            <tr>
+                                                                <td>{{pricing.ageGroup}}</td>
+                                                                <td>
+                                                                    <span *ngIf="pricing.singleTicketPrice === 0; else elseBlock">
+                                                    Ingyenes</span>
+                                                                    <ng-template #elseBlock> {{pricing.singleTicketPrice}} Ft</ng-template>
+
+                                                                </td>
+                                                                <td>
+                                                                    <span *ngIf="pricing.singleTicketPrice === 0; else elseBlock">
+                                                    Ingyenes</span>
+                                                                    <ng-template #elseBlock> {{pricing.sessionTicketPrice}} Ft
+                                                                    </ng-template>
+                                                                </td>
+                                                            </tr>
+                                                        </ng-template>
+                                                    </p-table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary">
+                                        <button class="scroll-to-top rounded" (click)="scrollUp()">
+                                    <span style="font-size: larger;"> <i class="fa fa-angle-up"></i>Lap tetejére
+                                    </span></button>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+        <p-dialog [(visible)]="facilityDialog" [style]="{width: '700px'}" [modal]="true" styleClass="p-fluid">
+            <div *ngIf="facility?.id; else elseBlock">
+                <h1>Sportlétesítmény adatainak módosítása</h1>
+            </div>
+            <ng-template #elseBlock>
+                <h1>Új Sportlétesítmény megadása</h1>
+            </ng-template>
+            <ng-template pTemplate="content">
+                <div class="center" style="padding-bottom:20px">
+                    <img src={{facility.profileImageString}} class="product-image p-shadow-4" width="600px" *ngIf="facility.image">
+                </div>
+
+                <h2> <b><label for="name" *ngIf="facility.id">Kép lecserélése</label></b></h2>
+                <h2><b><label for="name" *ngIf="!facility.id">Kép megadása</label></b></h2>
+                <p-fileUpload name="demo[]" [customUpload]=customUpload [auto]="true" (uploadHandler)="onFileChanged($event)" accept="image/*" chooseLabel="Kép feltöltés" [maxFileSize]="10000000">
+                    <ng-template pTemplate="content">
+                        <ul *ngIf="uploadedFiles.length">
+                            <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                        </ul>
+                    </ng-template>
+                </p-fileUpload>
+                <small class="p-error" *ngIf="submitted && !selectedFile">Kép felöltése kötelező.</small>
+
+                <div class="p-field">
+                    <h2><b><label for="name">Létesítmény neve</label></b></h2>
+                    <input type="text" pInputText id="name" [(ngModel)]="facility.name" required autofocus />
+                    <small class="p-error" *ngIf="submitted && !facility.name">Név mező kitöltése kötelező.</small>
+                </div>
+                <h2><b><label>Elérhetőség</label></b></h2>
+                <em><b><label>Cím térképen</label></b></em>
+                <p-fileUpload name="demo[]" [customUpload]=customUpload [auto]="true" (uploadHandler)="onMapUpload($event)" accept="image/*" chooseLabel="Kép feltöltés" [maxFileSize]="10000000">
+                    <ng-template pTemplate="content">
+                        <ul *ngIf="uploadedFiles.length">
+                            <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                        </ul>
+                    </ng-template>
+                </p-fileUpload>
+                <small class="p-error" *ngIf="submitted && !selectedMapFile">Kép felöltése kötelező.</small>
+                <div class="p-formgrid p-grid">
+
+                    <div class="p-field p-col">
+                        <em><b><label>Város</label></b></em>
+                        <p-dropdown [options]="cities" [ngModel]="facility.address && facility.address?.city" (ngModelChange)="facility.address.city=$event" optionLabel="cityName" [virtualScroll]="true" [itemSize]="30" [filter]="true" filterBy="cityName">
+                        </p-dropdown>
+                        <small class="p-error" *ngIf="submitted && !facility.address.city">Válassza ki a várost</small>
+
+
+                    </div>
+                    <div class="p-field p-col">
+                        <em> <b><label>Utca</label></b></em>
+                        <input type="text" pInputText [ngModel]="facility.address && facility.address.street" (ngModelChange)="facility.address.street=$event" required autofocus />
+                        <small class="p-error" *ngIf="submitted && !facility.address.street">Adjon meg utcát</small>
+
+                    </div>
+                </div>
+                <div class="p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <em> <b><label>Telefon szám</label></b></em>
+                        <p-inputMask mask="99/999-9999" placeholder="30/123-4567" [ngModel]="facility.contactData && facility.contactData?.telNumber" (ngModelChange)="facility.contactData.telNumber=$event">
+                        </p-inputMask>
+                        <small class="p-error" *ngIf="submitted && !facility.contactData.telNumber">Adjon meg
+                        telefonszámot</small>
+
+                    </div>
+                    <div class="p-field p-col">
+                        <em> <b><label>Email</label></b></em>
+                        <input type="text" pInputText [ngModel]="facility.contactData && facility.contactData.email" (ngModelChange)="facility.contactData.email=$event" required autofocus />
+                        <small class="p-error" *ngIf="submitted && !facility.contactData.email">Adjon meg emailt</small>
+
+                    </div>
+                </div>
+                <div class="p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <em> <b><label>Elérhető sportok</label></b></em>
+                        <p-multiSelect [options]="sports" [(ngModel)]="facility.availableSports" optionLabel="name">
+                        </p-multiSelect>
+                        <small class="p-error" *ngIf="submitted && !facility.contactData.email">Válasszon legalább egy
+                        sportot</small>
+                    </div>
+                    <div class="p-field p-col">
+                        <em> <b><label>Oktatók (opcionális)</label></b></em>
+                        <p-multiSelect [options]="instructorsLabel" [(ngModel)]="facility.instructors" optionLabel="name" optionValue="id" emptyFilterMessage="Nincs elérhető oktató">
+                        </p-multiSelect>
+                    </div>
+                </div>
+                <h2>
+                    <div><b><label>Nyitvatartási idő</label></b></div>
+                </h2>
+                <span *ngIf="facility.id">
+                <span *ngFor="let openingHour of facility.openingHours">
+                    <b><label>{{openingHour.day}}</label></b>
+                    <div class="p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <em><b><label>Nyitási időpont</label></b></em>
+                            <p-inputNumber [min]="0" [max]="24" [(ngModel)]="openingHour.openTime">
+                            </p-inputNumber>
+                            <small class="p-error" *ngIf="submitted && !openingHour.openTime">Kérjük adja meg a
+                                nyitási időpontot</small>
+                        </div>
+                        <div class="p-field p-col">
+                            <em><b><label>Zárás időpont</label></b></em>
+                            <p-inputNumber [min]="0" [max]="24" [(ngModel)]="openingHour.closeTime">
+                            </p-inputNumber>
+                            <small class="p-error" *ngIf="submitted && !openingHour.closeTime">Kérjük adja meg a
+                                zárási időpontot</small>
+                        </div>
+                    </div>
+                </span>
+                </span>
+                <span *ngIf="!facility.id">
+                <span *ngFor="let day of weekdays">
+                    <b><label>{{day.day}}</label></b>
+                    <div class="p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <em><b><label>Nyitási időpont</label></b></em>
+                            <p-inputNumber [min]="0" [max]="24" [(ngModel)]="day.openTime">
+                            </p-inputNumber>
+                            <small class="p-error" *ngIf="submitted && !day.openTime">Kérjük adja meg a nyitási
+                                időpontot</small>
+                        </div>
+                        <div class="p-field p-col">
+                            <em><b><label>Zárás időpont</label></b></em>
+                            <p-inputNumber [min]="0" [max]="24" [(ngModel)]="day.closeTime">
+                            </p-inputNumber>
+                            <small class="p-error" *ngIf="submitted && !day.closeTime">Kérjük adja meg a zárási
+                                időpontot</small>
+                        </div>
+                    </div>
+                </span>
+                </span>
+                <h2><b><label>Árazás</label></b></h2>
+                <span *ngIf="facility.id">
+                <span *ngFor="let price of facility.pricing">
+                    <b><label>{{price.ageGroup}}</label></b>
+                    <div class="p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <em><b><label>alkalmi jegy ár</label></b></em>
+                            <p-inputNumber id="price" [(ngModel)]="price.singleTicketPrice" mode="currency"
+                                currency="HUF" locale="hu-HU" [minFractionDigits]="0">
+                            </p-inputNumber>
+                            <small class="p-error" *ngIf="submitted && !price.singleTicketPrice">Kérjük adja meg az
+                                alkalmi jegy árát</small>
+                        </div>
+                        <div class="p-field p-col">
+                            <em> <b><label>Bérleti ár</label></b></em>
+                            <p-inputNumber id="price" [(ngModel)]="price.sessionTicketPrice" mode="currency"
+                                currency="HUF" locale="hu-HU" [minFractionDigits]="0">
+                            </p-inputNumber>
+                            <small class="p-error" *ngIf="submitted && !price.sessionTicketPrice">Kérjük adja meg a
+                                bérleti jegy árát</small>
+
+                        </div>
+                    </div>
+                </span>
+                </span>
+                <span *ngIf="!facility.id">
+                <span *ngFor="let price of pricing">
+                    <b><label>{{price.ageGroup}}</label></b>
+                    <div class="p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <em><b><label>alkalmi jegy ár</label></b></em>
+                            <p-inputNumber id="price" mode="currency" currency="HUF" locale="hu-HU"
+                                [minFractionDigits]="0" [(ngModel)]="price.singleTicketPrice"></p-inputNumber>
+                            <small class="p-error" *ngIf="submitted && !price.singleTicketPrice">Kérjük adja meg az
+                                alkalmi jegy árát</small>
+
+                        </div>
+                        <div class="p-field p-col">
+                            <em> <b><label>Bérleti ár</label></b></em>
+                            <p-inputNumber id="price" mode="currency" currency="HUF" locale="hu-HU"
+                                [minFractionDigits]="0" [(ngModel)]="price.sessionTicketPrice"></p-inputNumber>
+                            <small class="p-error" *ngIf="submitted && !price.sessionTicketPrice">Kérjük adja meg a
+                                bérleti jegy árát</small>
+                        </div>
+                    </div>
+                </span>
+                </span>
+                <div class="p-field">
+                    <h2><b><label for="description">Leírása</label></b></h2>
+                    <textarea id="description" pInputTextarea [(ngModel)]="facility.description" required rows="3" cols="20"></textarea>
+                    <small class="p-error" *ngIf="submitted && !facility.description">Leírás mező kitöltése
+                    kötelező.</small>
+                </div>
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Elvetés" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton pRipple label="Mentés" icon="pi pi-check" class="p-button-text" (click)="saveFacility()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+
+
+    <p-confirmDialog #cd [style]="{width: '450px'}">
+        <p-footer>
+            <button type="button" pButton icon="fa fa-times" label="Mégsem" (click)="cd.reject()"></button>
+            <button type="button" pButton icon="fa fa-check" label="Igen" (click)="cd.accept()"></button>
+        </p-footer>
+    </p-confirmDialog>
+</body>

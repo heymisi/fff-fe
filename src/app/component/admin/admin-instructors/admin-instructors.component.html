@@ -1,0 +1,112 @@
+<p-toast>
+
+
+</p-toast>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Oktatók</h1>
+                    <p class="mb-4">Aktuális adataink a rendszerbe regisztrált oktatókról
+                    </p>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <p-table #dt dataKey="id" [value]="instructors" class="p-datatable-customers" width="100%" cellspacing="0" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" [(first)]="first" currentPageReportTemplate="Mutat {first}-{last}-ig {totalRecords}-ból"
+                                    [rowsPerPageOptions]="[10,25,50]" [loading]="loading" [globalFilterFields]="['user.firstName','user.lastName']" [scrollable]="true" (onPage)="scrollUp()">
+                                    <ng-template pTemplate="caption">
+                                        <div class="p-d-flex">
+                                            <div class="p-d-flex p-ai-center p-jc-between" style="padding-left:20px;">
+                                                Összesen {{instructors ? instructors.length : 0 }} Oktató érhető el.
+                                            </div>
+                                            <span class="p-input-icon-left p-ml-auto">
+                                                <i class="pi pi-search"></i>
+                                                <input pInputText type="text"
+                                                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                                    placeholder="Keresés név alapján" />
+                                            </span>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Kép</th>
+
+                                            <th pSortableColumn="user.firstName">Név
+                                                <p-sortIcon field="user.firstName">
+                                                </p-sortIcon>
+                                            </th>
+                                            <th>Email</th>
+                                            <th pSortableColumn="user.shippingAddress.city.cityName">Cím
+                                                <p-sortIcon field="shippingAddress.city.cityName"></p-sortIcon>
+                                            </th>
+                                            <th>Telefonszám
+                                            </th>
+                                            <th pSortableColumn="rating">Értékelés
+                                                <p-sortIcon field="rating">
+                                                </p-sortIcon>
+                                            </th>
+                                            <th>Titulus</th>
+                                            <th>Bemutatkozás</th>
+                                            <th>Sportok</th>
+                                            <th pSortableColumn="sportFacility.name">Sportlétesítmény
+                                                <p-sortIcon field="sportFacility.name">
+                                                </p-sortIcon>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-instructor>
+                                        <tr>
+                                            <td style="height: 200px; width: 200px;"><img src={{instructor.imageString}} class="p-shadow-4" /></td>
+                                            <td>{{instructor.user.firstName}} {{instructor.user.lastName}}</td>
+                                            <td>{{instructor.user.contactData?.email}}</td>
+                                            <td>
+                                                <span>{{instructor.user.shippingAddress?.country}}
+                                                    {{instructor.user.shippingAddress?.city.cityName}}
+                                                    {{instructor.user.shippingAddress?.street}}</span>
+                                            </td>
+                                            <td>{{instructor.user.contactData?.telNumber}}</td>
+                                            <td>
+                                                <p-rating [ngModel]="instructor.rating" [readonly]="true" [cancel]="false">
+                                                </p-rating>
+                                            </td>
+                                            <td>{{instructor.title}}</td>
+                                            <td>{{instructor.bio}}</td>
+                                            <td>
+                                                <div *ngFor="let sport of instructor.knownSports">
+                                                    <div>{{sport.name}}</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div *ngIf="instructor.sportFacility; else elseFacility">
+                                                    {{instructor.sportFacility.name}}</div>
+                                                <ng-template #elseFacility><em>Nincs</em></ng-template>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary">
+                                        <button class="scroll-to-top rounded" (click)="scrollUp()">
+                                            <span style="font-size: larger;"> <i class="fa fa-angle-up"></i>Lap tetejére
+                                            </span></button>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

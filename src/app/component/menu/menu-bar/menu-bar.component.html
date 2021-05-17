@@ -1,0 +1,73 @@
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<aside class="menu-sidebar d-none d-lg-block fixed-top">
+    <div class="logo">
+        <a routerLink="/home">
+            <img src="assets/images/logo.png" alt="FitForFun" class="img-responsive">
+        </a>
+    </div>
+</aside>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand">
+            <em>A hely, ahol a mozgás kezdődik</em>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item" [routerLinkActive]="['active']">
+                        <a class="nav-link" routerLink="/home">
+                            <i class="material-icons">
+                store_mall_directory</i>Kezdőlap
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" [routerLinkActive]="['active']">
+                        <a class="nav-link" routerLink="/products">
+                            <span class="material-icons">
+                storefront
+              </span>Termékek</a>
+                    </li>
+                    <li class="nav-item" [routerLinkActive]="['active']">
+                        <a class="nav-link" routerLink="/instructors"><i class="material-icons">
+                accessibility_new
+              </i>Edzők</a>
+                    </li>
+                    <li class="nav-item" [routerLinkActive]="['active']">
+                        <a class="nav-link" routerLink="/facilities"><i class="material-icons">
+                local_convenience_store
+              </i>Sportlétesítmények</a>
+                    </li>
+                    <span *ngIf="user==='guest'">
+            <li class="nav-item" [routerLinkActive]="['active']">
+              <a class="nav-link" routerLink="/login"><i class="material-icons">login</i>Bejelentkezés</a>
+            </li>
+          </span>
+                    <span *ngIf="user==='user'">
+            <li class="nav-item" [routerLinkActive]="['active']">
+              <a class="nav-link" routerLink="/user/profile"><i class="material-icons">
+                  account_circle
+                </i>Profilom</a>
+            </li>
+          </span>
+                    <span *ngIf="user==='instructor'">
+            <li class="nav-item" [routerLinkActive]="['active']">
+              <a class="nav-link" routerLink="/instructor/profile"><i class="material-icons">
+                  account_circle
+                </i>Profilom</a>
+            </li>
+          </span>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="page-container">
+    <router-outlet></router-outlet>
+</div>
+<app-footer></app-footer>

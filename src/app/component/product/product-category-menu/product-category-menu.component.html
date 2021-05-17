@@ -1,0 +1,73 @@
+<div class="menu-sidebar-content js-scrollbar1" style="overflow:auto;">
+    <nav class="navbar-sidebar">
+        <h2 style="text-align: center; padding-top: 1em;"><em>Szűrés <span class="material-icons">
+          filter_alt
+        </span></em></h2>
+        <mat-card>
+            <mat-card-header>
+                <span class="example-list-section">
+          <label id="example-radio-group-label"> <b>Kategória szerint</b></label>
+        </span>
+            </mat-card-header>
+            <mat-card-content>
+
+                <section class="example-section">
+
+                    <span class="example-list-section">
+            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+              [(ngModel)]="categoryFilter">
+              <mat-radio-button class="example-margin" *ngFor="let tempProductCategory of productCategories"
+                [value]="tempProductCategory">
+                {{tempProductCategory.categoryName}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </span>
+                </section>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+            <mat-card-header>
+                <label> <b>Sport szerint</b></label>
+            </mat-card-header>
+            <mat-card-content>
+                <section class="example-section">
+                    <span class="example-list-section">
+            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+              [(ngModel)]="sportFilter">
+              <mat-radio-button class="example-margin" *ngFor="let sport of sports" [value]="sport">
+                {{sport.name}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </span>
+                </section>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+            <mat-card-header>
+                <label><b> Ár szerint</b></label>
+            </mat-card-header>
+            <mat-card-content>
+                <section class="example-section">
+
+                    <span class="example-list-section">
+            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+              [(ngModel)]="priceFilter">
+              <mat-radio-button class="example-margin" *ngFor="let price of priceCategories" [value]="price">
+                {{price.text}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </span>
+                    <button class="btn float-right filter_btn" (click)="onFilter()">
+            <b>Szűrés <i class="fa fa-filter"></i></b>
+          </button>
+                    <button class="btn float-right filter_btn" (click)="onDiscard()">
+            <b>Elvetés <i class="fa fa-times"></i></b>
+          </button>
+                </section>
+            </mat-card-content>
+        </mat-card>
+
+    </nav>
+</div>

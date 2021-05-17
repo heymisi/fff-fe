@@ -1,0 +1,357 @@
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
+<body>
+    <div class="main-content">
+
+        <!-- Page content -->
+        <div class="container-fluid mt--7" style="padding-top: 100px;">
+            <div class="row">
+                <div class="col-xl-3 order-xl-1  bg-gradient-primary">
+                    <div class="menu-sidebar-content js-scrollbar1" style="overflow:auto;">
+                        <nav class="navbar-sidebar">
+                            <div class="align-items-center text-center" style="padding-top: 20px;">
+                                <h1 style="color:white;" class="text-center">EDZŐI FIÓK</h1>
+                                <h2 style="color: wheat;"><em>{{user.firstName}} {{user.lastName}}</em></h2>
+                            </div>
+                            <ul class="navbar-nav  sidebar-dark" style=" overflow-y:auto;">
+                                <hr class="sidebar-divider my-0">
+
+                                <!-- Sidebar - Brand -->
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/instructor/profile">
+                                        <span class="fa fa-user-circle" style="font-size: 1.3em;cursor:pointer">
+                                            Személyes adatok</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/instructor/profile/instr-data">
+                                        <span style="font-size: 1.3em;cursor:pointer"><span class="material-icons">
+                                                supervised_user_circle
+                                            </span> Edzői adatok</span>
+                                    </a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/instructor/profile/training-sessions">
+                                        <span style="font-size: 1.3em;cursor:pointer"><span class="material-icons">
+                                                directions_run
+                                            </span> Edzéseim</span>
+                                    </a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+                                <!-- Nav Item - Tables -->
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em; cursor: pointer;">
+                                    <a class="nav-link" (click)="logout()">
+                                        <span class="bi bi-chevron-bar-right" style="font-size: 1.3em;cursor:pointer">
+                                            Kilépés</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+                                <!-- Divider -->
+                                <hr class="sidebar-divider d-none d-md-block">
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+                <div class="col-xl-9 order-xl-2 mb-5 mb-xl-0">
+
+                    <div class="card bg-secondary shadow">
+                        <div class="card-header bg-white border-0">
+                            <div class="text-center">
+                                <h1 class="mb-0"><b>FIÓKOM ADATAI</b></h1>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form [formGroup]="profileFormGroup">
+                                <h6 class="heading-small text-muted mb-4" style="font-size: larger;">Személyes információk
+                                </h6>
+                                <div class="pl-lg-4">
+                                    <div formGroupName="name">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group focused">
+                                                    <label class="form-control-label" for="input-username">Vezetéknév</label>
+                                                    <input type="text" id="input-username" class="form-control form-control-alternative" [(ngModel)]="instructor.user.firstName" formControlName="firstName">
+                                                    <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="alert alert-danger mt-1">
+                                                        <div *ngIf="firstName.errors.required || firstName.errors.notOnlyWhitespace">
+                                                            <small id="username2-help" class="p-error">Adja meg a
+                                                                vezetéknevét</small>
+                                                        </div>
+                                                        <div *ngIf="firstName.errors.minlength">
+                                                            <small id="username2-help" class="p-error">Legalább
+                                                                2 karakter hosszú lehet a vezetékneve!</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="input-email">Keresztnév</label>
+                                                    <input type="email" id="input-email" class="form-control form-control-alternative" [(ngModel)]="instructor.user.lastName" formControlName="lastName">
+                                                    <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="alert alert-danger mt-1">
+                                                        <div *ngIf="lastName.errors.required || lastName.errors.notOnlyWhitespace">
+                                                            <small id="username2-help" class="p-error">Adja meg a
+                                                                vezetéknevét</small>
+                                                        </div>
+                                                        <div *ngIf="lastName.errors.minlength">
+                                                            <small id="username2-help" class="p-error">Legalább
+                                                                2 karakter hosszú lehet a vezetékneve!</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div formGroupName="contact">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group focused">
+                                                    <label class="form-control-label" for="input-first-name">Email
+                                                        cím</label>
+                                                    <input type="text" id="input-first-name" class="form-control form-control-alternative" [(ngModel)]="instructor.user.contactData.email" formControlName="email">
+                                                    <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger mt-1">
+                                                        <div *ngIf="email.errors.required">
+                                                            <small id="username2-help" class="p-error">Adja meg az email
+                                                                címét!</small>
+                                                        </div>
+                                                        <div *ngIf="email.errors.pattern">
+                                                            <small id="username2-help" class="p-error">Helyes email
+                                                                formátumot adjon meg!</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group focused">
+                                                    <label class="form-control-label" for="input-last-name">Telefonszám</label>
+                                                    <input type="number" id="input-last-name" class="form-control form-control-alternative" [(ngModel)]="instructor.user.contactData.telNumber" formControlName="mobile">
+                                                    <div *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)" class="alert alert-danger mt-1">
+                                                        <div *ngIf="mobile.errors.required">
+                                                            <small id="username2-help" class="p-error">Adja meg a
+                                                                telefonszámát!</small>
+                                                        </div>
+                                                        <div *ngIf="mobile.errors.min || mobile.errors.max">
+                                                            <small id="username2-help" class="p-error">9 számjegyű lehet
+                                                                egy telefonszám!</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-4">
+                                <!-- Address -->
+                                <h6 class="heading-small text-muted mb-4" style="font-size: larger;">Érintkezési adatok
+                                </h6>
+                                <div formGroupName="address">
+                                    <div class="pl-lg-4">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group focused">
+                                                    <label class="form-control-label" for="input-address">Utca</label>
+                                                    <input id="input-address" class="form-control form-control-alternative" [(ngModel)]="instructor.user.shippingAddress.street" formControlName="street">
+                                                    <div *ngIf="street.invalid && (street.dirty || street.touched)" class="alert alert-danger mt-1">
+                                                        <div *ngIf="street.errors.required">
+                                                            <small id="username2-help" class="p-error">Adja meg az
+                                                                utcát!</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-lg-4">
+                                                <div class="form-group focused">
+                                                    <label class="form-control-label" for="input-country">Ország</label>
+                                                    <input type="text" id="input-country" class="form-control form-control-alternative" [(ngModel)]="instructor.user.shippingAddress.country" formControlName="country">
+                                                    <div *ngIf="country.invalid && (country.dirty || country.touched)" class="alert alert-danger mt-1">
+                                                        <div *ngIf="country.errors.required">
+                                                            <small id="username2-help" class="p-error">Adja meg az
+                                                                országot!</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4">
+                                                <div class="form-group focused">
+                                                    <div> <label for="city" class="form-control-label">Megye</label>
+                                                    </div>
+                                                    <p-autoComplete id="city" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%','font-size': '1rem','color': '#8898aa','display':'block',
+                             'height':'calc(2.75rem + 2px)','padding':'.625rem .75rem','transition':'all .2s cubic-bezier(.68, -.55, .265, 1.55)',
+                            'border':'1px solid #cad1d7','border-radius':'.375' }" [(ngModel)]="instructor.user.shippingAddress.county" class="form-control-alternative" formControlName="county" [suggestions]="filteredCounties" (completeMethod)="filterCounty($event)"
+                                                        [dropdown]="true">
+                                                        <ng-template let-county pTemplate="item">
+                                                            <div>{{county}}</div>
+                                                        </ng-template>
+                                                    </p-autoComplete>
+                                                    <div *ngIf="county.invalid && (county.dirty || county.touched)" class="alert alert-danger mt-1">
+                                                        <div *ngIf="county.errors.required">
+                                                            <small id="username2-help" class="p-error">Adja meg a
+                                                                megyéjét!</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group focused">
+                                                    <div> <label for="city" class="form-control-label">Város</label>
+                                                    </div>
+                                                    <p-autoComplete id="city" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%','font-size': '1rem','color': '#8898aa','display':'block',
+                                                             'height':'calc(2.75rem + 2px)','padding':'.625rem .75rem','transition':'all .2s cubic-bezier(.68, -.55, .265, 1.55)',
+                                                            'border':'1px solid #cad1d7','border-radius':'.375' }" [(ngModel)]="instructor.user.shippingAddress.city" field="cityName" class="form-control-alternative" formControlName="city" [suggestions]="filteredCities"
+                                                        (completeMethod)="filterCity($event)" [dropdown]="true">
+                                                        <ng-template let-city pTemplate="item">
+                                                            <div>{{city.cityName}}</div>
+                                                        </ng-template>
+                                                    </p-autoComplete>
+                                                    <div *ngIf="city.invalid && (city.dirty || city.touched)" class="alert alert-danger mt-1">
+                                                        <div *ngIf="city.errors.required">
+                                                            <small id="username2-help" class="p-error">Adja meg a
+                                                                városát!</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Description -->
+                                <div style="padding-bottom: 2em;">
+                                    <button class="btn float-right filter_btn" style="font-size: larger;" (click)="modifyUser()">
+                                        <b>Módosítások mentése </b>
+                                    </button>
+
+                                </div>
+                                <!-- Address -->
+                                <hr class="my-4">
+                            </form>
+                            <form [formGroup]="profilePassFormGroup">
+
+                                <h6 class="heading-small text-muted mb-4" style="font-size: larger;">Jelszó megváltoztatása
+                                </h6>
+                                <div formGroupName="pass">
+                                    <div class="pl-lg-4">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="form-group focused">
+                                                    <label class="form-control-label" for="input-city">Régi
+                                                        jelszó</label>
+                                                    <input type="text" formControlName="oldPass" id="input-city" class="form-control form-control-alternative">
+                                                    <div *ngIf="oldPass.invalid && (oldPass.dirty || oldPass.touched)" class="alert alert-danger mt-1">
+                                                        <div *ngIf="oldPass.errors.required || oldPass.errors.notOnlyWhitespace">
+                                                            <small id="username2-help" class="p-error">Adja meg régi
+                                                                jelszavát</small>
+                                                        </div>
+                                                        <div *ngIf="oldPass.errors.minlength">
+                                                            <small id="username2-help" class="p-error">Legalább
+                                                                6 karakter hosszú lehet jelszava!</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group focused">
+                                                    <label class="form-control-label" for="input-country">Új
+                                                        jelszó</label>
+                                                    <input type="text" formControlName="newPass" id="input-country" class="form-control form-control-alternative">
+                                                    <div *ngIf="newPass.invalid && (newPass.dirty || newPass.touched)" class="alert alert-danger mt-1">
+                                                        <div *ngIf="newPass.errors.required || newPass.errors.notOnlyWhitespace">
+                                                            <small id="username2-help" class="p-error">Adja meg új
+                                                                jelszavát</small>
+                                                        </div>
+                                                        <div *ngIf="newPass.errors.minlength">
+                                                            <small id="username2-help" class="p-error">Legalább
+                                                                6 karakter hosszú legyen jelszava!</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="form-control-label" for="input-country">Új jelszó
+                                                        ismét</label>
+                                                    <input type="text" formControlName="newPassAgain" id="input-postal-code" class="form-control form-control-alternative">
+                                                    <div *ngIf="newPassAgain.invalid && (newPassAgain.dirty || newPassAgain.touched)" class="alert alert-danger mt-1">
+                                                        <div *ngIf="newPassAgain.errors.required || newPassAgain.errors.notOnlyWhitespace">
+                                                            <small id="username2-help" class="p-error">Adja meg új
+                                                                jelszavát ismét</small>
+                                                        </div>
+                                                        <div *ngIf="newPassAgain.errors.minlength">
+                                                            <small id="username2-help" class="p-error">Legalább
+                                                                6 karakter hosszú legyen jelszava!</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="padding-bottom: 2em;">
+                                            <button class="btn float-right filter_btn" style="font-size: larger;" (click)="changePass()">
+                                                <b>Új jelszó beállítása </b>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-4">
+                                <h6 class="heading-small text-muted mb-4" style="font-size: larger;">Fiók felfüggesztése
+                                </h6>
+                                <div formGroupName="passForDelete">
+
+                                    <div class="row">
+                                        <div class="col-lg-5 horizontal-middle">
+                                            <span>A felfüggesztés végleges művelet, kérjük jól gondolja át, mielőtt
+                                                törölné fiókját .</span>
+                                        </div>
+                                        <div class="col-lg-4 horizontal-middle">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="input-country">Jelszava</label>
+                                                <input type="text" formControlName="pass" id="input-postal-code" class="form-control form-control-alternative">
+                                                <div *ngIf="pass.invalid && (pass.dirty || pass.touched)" class="alert alert-danger mt-1">
+                                                    <div *ngIf="pass.errors.required || pass.errors.notOnlyWhitespace">
+                                                        <small id="username2-help" class="p-error">Adja meg
+                                                            jelszavát</small>
+                                                    </div>
+                                                    <div *ngIf="pass.errors.minlength">
+                                                        <small id="username2-help" class="p-error">Legalább
+                                                            6 karakter hosszú lehet jelszava!</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 align-bottom" style="padding-top:20px;">
+                                            <div style="padding-bottom: 2em; ">
+                                                <button class="btn float-right filter_btn delete-user-bttn" (click)="deleteProfile()">
+                                                    <b>Felfüggesztés</b>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<p-confirmDialog #cd [style]="{width: '450px'}">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-check" label="Rendben" (click)="cd.accept()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-confirmDialog key="logoutDialog" #cd2 [style]="{width: '450px'}">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-times" label="Mégsem" (click)="cd2.reject()"></button>
+        <button type="button" pButton icon="fa fa-check" label="Kijelentkezek" (click)="cd2.accept()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-toast position="center"></p-toast>

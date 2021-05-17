@@ -1,0 +1,133 @@
+<div class="main-content" style="background-color: white;">
+    <div class="container-fluid" *ngIf="!progressBarVisible">
+        <div class="row">
+
+            <div class="col-md-3 side">
+                <form [formGroup]="instructorFormGroup">
+                    <div formGroupName="search">
+                        <div class="card my-4">
+                            <h2 class="card-header">Keresés név alapján</h2>
+                            <div class="card-body">
+                                <div class="input-group">
+                                    <input #searchNameinput type="text" class="form-control" placeholder="Keress sportlétesítményeink között.." formControlName="name">
+                                    <span class="input-group-append">
+                                        <button class="search-butt" type="button" (click)="listInstructors()">Keres
+                                            <span class="fa fa-search"></span></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card my-4">
+                            <h2 class="card-header">Keresés lakhelye alapján</h2>
+                            <div class="card-body">
+                                <div class="input-group">
+                                    <input type="text" #searchCityInput class="form-control" placeholder="Keress sportlétesítményeink között.." [matAutocomplete]="auto" formControlName="city">
+                                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                        <mat-option *ngFor="let city of filteredCities | async" [value]="city">
+                                            {{ city }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <span class="input-group-append">
+                                        <button class="search-butt" type="button" (click)="listInstructors()">Keres
+                                            <span class="fa fa-search"></span></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="card my-4">
+                    <h2 class="card-header">Kategória szerint</h2>
+                    <div class="card-body">
+                        <h2>Sport <span class="material-icons">
+                                sports_soccer
+                            </span></h2>
+                        <ul class="list-unstyled mb-0" *ngFor="let sport of sports">
+                            <li style="padding-left: 20px;">
+                                <a class="sport-link" (click)="handleSearchInstructorBySport(sport)" style="font-size: larger;padding-bottom: 10px;"> {{sport.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+
+                <div class="p-4 p-md-12 mb-4 text-white rounded" style="background-color: #205b8d;">
+                    <h1 class="display-4 fst-italic" style="color: antiquewhite;">Böngésszen edzőink között!</h1>
+                    <p class="lead my-3">({{totalElements}} elérhető)</p>
+                    <p class="lead my-3">A legkiválóbb edzők között válogathat, akik rendelkeznek olyan magas szintű képesítéssel, ami segíti önt bármely sporttal kapcsolatos céljában.</p>
+                </div>
+
+                <div *ngIf="instructors?.length == 0" style="padding-top: 50px; text-align: center;" class="align-items-center">
+                    <h1><em>Nincs elérhető Edző</em></h1>
+                </div>
+
+                <div *ngIf="instructors?.length != 0">
+                    <div class="row align-items-center">
+                        <div class="col-md-6 " style="text-align: left;">
+                            <span class="mr-auto">Megjelenítés</span>
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{pageSize}} / oldal</mat-label>
+                                <mat-select [(value)]="selectedPageSize" (selectionChange)="updatePageSize(selectedPageSize)">
+                                    <mat-option selected value="9">9 / oldal</mat-option>
+                                    <mat-option value="18">18 / oldal</mat-option>
+                                    <mat-option value="45">45 / oldal</mat-option>
+                                    <mat-option value="90">90 / oldal</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6" style="text-align: right;">
+                            <div class="row">
+                                <div class="col-md-6"></div>
+                                <div class="col-md-6">
+                                    <ngb-pagination [(page)]="pageNumber" [pageSize]="pageSize" [collectionSize]="totalElements" [maxSize]="4" [boundaryLinks]="true" (pageChange)="listInstructors()">
+                                    </ngb-pagination>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- top paginator bar end-->
+
+                    <!-- card start-->
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" *ngFor="let instructor of instructors">
+                        <div class="col-auto d-none d-lg-block">
+                            <a routerLink="/instructors/{{instructor.id}}"><img class="bd-placeholder-img p-shadow-4" width="400" height="300" src={{instructor.imageString}} role="img" aria-label="Placeholder: Thumbnail" focusable="false">
+                            </a>
+                        </div>
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <h1 class="mb-0"><b>{{instructor.user.lastName}} {{instructor.user.firstName}}</b></h1>
+                            <h2 class="d-inline-block mb-2" style="color: #205b8d;"><b>{{instructor.title}}</b></h2>
+                            <h2 class="d-inline-block">{{instructor.user.shippingAddress.city.cityName}}</h2>
+                            <p class="mb-auto" style="font-size: larger; padding-bottom: 20px;">{{instructor.bio}}
+                            </p>
+                            <a routerLink="/instructors/{{instructor.id}}" class="btn btn-primary">További
+                                részletek&rarr;</a>
+                        </div>
+
+                    </div>
+                    <div class="footer-pagination">
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-9" style="padding-left:52%">
+
+                                        <ngb-pagination [(page)]="pageNumber" [pageSize]="pageSize" [collectionSize]="totalElements" [maxSize]="4" [boundaryLinks]="true" (pageChange)="listInstructors()">
+
+                                        </ngb-pagination>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="loading-indicator" *ngIf="progressBarVisible">
+    <mat-progress-spinner style="margin:0 auto;" mode="indeterminate">
+    </mat-progress-spinner>
+</div>

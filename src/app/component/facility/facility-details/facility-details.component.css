@@ -1,0 +1,102 @@
+.on-map {
+    cursor: pointer;
+    color: black;
+}
+
+.on-map:hover {
+    color: blue
+}
+
+.hiddenimg {
+    display: none;
+    width: 1400px;
+}
+
+.hiddentxt {
+    cursor: pointer;
+    font-weight: bold;
+    color: blue;
+    z-index: 99;
+    text-decoration: underline;
+}
+
+.hiddentxt a {
+    color: blue;
+    text-decoration: none;
+    z-index: 99;
+    text-decoration: underline;
+}
+
+.hiddentxt a:hover {
+    color: blue;
+}
+
+.hiddentxt:hover~.hiddenimg {
+    display: block;
+    position: absolute;
+    z-index: 2
+}
+
+.hiddenclickimg {
+    display: none;
+}
+
+.opening-hours {
+    padding-left: 20px;
+}
+
+mat-divider {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.example-header-image {
+    background-image: url("/assets/images/user_icon.png");
+    background-size: cover;
+}
+
+.instructor-name {
+    display: flex;
+    align-items: center;
+    /*Aligns vertically center */
+    justify-content: center;
+    /*Aligns horizontally center */
+}
+
+.list-element {
+    padding: 5px
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+}
+
+.pricing-header {
+    max-width: 700px;
+}
+
+.card-deck .card {
+    min-width: 220px;
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+.comm-header {
+    color: #0da8e4;
+    padding-top: 20px;
+}

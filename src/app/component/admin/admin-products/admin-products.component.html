@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Tables</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+</head>
+
+<p-toast key="admin-product-key" position="center"></p-toast>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">Termékeink</h1>
+                    <p class="mb-4">Aktuális adataink a termékekről, amelyekhez szabadon hozzáadhat újat, módosíthat, vagy akár törölhet.
+                    </p>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <p-table #dt dataKey="id" [value]="products" class="p-datatable-customers" id="dataTable" width="100%" [(selection)]="selectedProducts" cellspacing="0" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" [(first)]="first" currentPageReportTemplate="Mutat {first}-{last}-ig {totalRecords}-ból"
+                                    [rowsPerPageOptions]="[10,25,50]" [loading]="loading" [globalFilterFields]="['name','price','dateCreated','unitsInStock','description','category.categoryName','sportType.name']" [scrollable]="true" (onPage)="scrollUp()">
+                                    <ng-template pTemplate="caption">
+                                        <div class="p-d-flex">
+                                            <button pButton pRipple label="Új Termék Hozzáadása" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="openNew()"></button>
+
+                                            <div class="p-d-flex p-ai-center p-jc-between" style="padding-left:20px;">
+                                                Összesen {{products ? products.length : 0 }} termék érhető el.
+                                            </div>
+                                            <span class="p-input-icon-left p-ml-auto">
+                                                <i class="pi pi-search"></i>
+                                                <input pInputText type="text"
+                                                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                                    placeholder="Keresés mindenhol" />
+                                            </span>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="width: 3rem">
+                                            </th>
+                                            <th style="width: 300px;">Kép</th>
+                                            <th pSortableColumn="name">Termék neve
+                                                <p-sortIcon field="name">
+                                                </p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="price">Ár
+                                                <p-sortIcon field="price"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="rating">Értékelés
+                                                <p-sortIcon field="rating">
+                                                </p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="dateCreated">Létrehozás dátuma
+                                                <p-sortIcon field="dateCreated"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="lastUpdated">Utolsó módosítás
+                                                <p-sortIcon field="lastUpdated"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="unitsInStock">Raktáron
+                                                <p-sortIcon field="unitsInStock"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="category">Kategória
+                                                <p-sortIcon field="category.categoryName">
+                                                </p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="sportType">Sport
+                                                <p-sortIcon field="sportType">
+                                                </p-sortIcon>
+                                            </th>
+                                            <th></th>
+
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-product let-expanded="expanded">
+                                        <tr>
+                                            <td style="width:3rem">
+                                                <button type="button" pButton pRipple [pRowToggler]="product" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                            </td>
+                                            <td style="height: 300px; width: 300px;"><img src={{product.imageString}} class="p-shadow-4" /></td>
+                                            <td>{{product.name}}</td>
+                                            <td>{{product.price | currency:'HUF':"symbol":"3.0-2":"hu"}}</td>
+                                            <td>
+                                                <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false">
+                                                </p-rating>
+                                            </td>
+                                            <td>{{product.dateCreated | date:'short':'+0100':'HU'}}</td>
+                                            <td>{{product.lastUpdated | date:'short':'+0100':'HU'}}</td>
+                                            <td>{{product.unitsInStock}}</td>
+                                            <td>{{product.category?.categoryName}}</td>
+                                            <td>{{product.sportType?.name}}</td>
+
+                                            <td>
+                                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editProduct(product)"></button>
+                                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(product)"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="rowexpansion" let-product>
+                                        <td colspan="9">
+                                            <h2>Leírás:</h2>
+                                            <div style="padding-bottom: 15px;"> {{product.description}}</div>
+                                        </td>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary">
+                                        <button class="scroll-to-top rounded" (click)="scrollUp()">
+                                            <span style="font-size: larger;"> <i class="fa fa-angle-up"></i>Lap tetejére
+                                            </span></button>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <p-dialog [(visible)]="productDialog" [style]="{width: '700px'}" [modal]="true" styleClass="p-fluid">
+        <div *ngIf="product?.id; else elseBlock">
+            <h1>Termék módosítása</h1>
+        </div>
+        <ng-template #elseBlock>
+            <h1>Új termék hozzáadása</h1>
+        </ng-template>
+
+        <ng-template pTemplate="content">
+            <div class="center" style="padding-bottom:20px">
+                <img src={{product.imageString}} class="product-image" width="250px" height="250px" *ngIf="product.imageString">
+            </div>
+            <b>
+                <label for="name" *ngIf="product.id">Kép lecserélése</label>
+                <label for="name" *ngIf="!product.id">Kép megadása</label></b>
+            <p-fileUpload name="demo[]" [customUpload]=customUpload [auto]="true" (uploadHandler)="onFileChanged($event)" accept="image/*" chooseLabel="Kép feltöltés" [maxFileSize]="10485760">
+                <ng-template pTemplate="content">
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                    </ul>
+                </ng-template>
+            </p-fileUpload>
+
+            <div class="p-field">
+                <b><label for="name">Termék neve</label></b>
+                <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus />
+                <small class="p-error" *ngIf="submitted && !product.name">Név mező kitöltése kötelező.</small>
+            </div>
+            <div class="p-field">
+                <b><label for="description">Leírása</label></b>
+                <textarea id="description" pInputTextarea [(ngModel)]="product.description" required rows="3" cols="20"></textarea>
+                <small class="p-error" *ngIf="submitted && !product.description">Leírás mező kitöltése kötelező.</small>
+            </div>
+
+            <div class="p-field">
+                <b><label class="p-mb-3">Kategória</label></b>
+                <div class="p-formgrid p-grid">
+                    <div class="p-field-radiobutton p-col-6" *ngFor="let category of productCategories">
+                        <div *ngIf="product.id">
+                            <p-radioButton [(ngModel)]="product.category.categoryName" [value]="category?.categoryName">
+                            </p-radioButton>
+                            <label>{{category?.categoryName}}</label>
+                        </div>
+                        <div *ngIf="!product.id">
+                            <p-radioButton [(ngModel)]="product.category" [value]="category">
+                            </p-radioButton>
+                            <label>{{category.categoryName}}</label>
+                        </div>
+                    </div>
+                    <small class="p-error" *ngIf="submitted && !product.sportType">Kategória mező megadása
+                        kötelező.</small>
+                </div>
+            </div>
+
+            <div class="p-field">
+                <b> <label class="p-mb-3">Sport fajta</label></b>
+                <div class="p-formgrid p-grid">
+                    <div class="p-field-radiobutton p-col-6" *ngFor="let sport of sports">
+                        <div *ngIf="product.id; else elseSportType">
+                            <p-radioButton name="sportType" [(ngModel)]="product?.sportType.name" [value]="sport?.name">
+                            </p-radioButton>
+                            <label>{{sport?.name}}</label>
+                        </div>
+                        <ng-template #elseSportType>
+                            <p-radioButton name="sportType" [(ngModel)]="product.sportType" [value]="sport">
+                            </p-radioButton>
+                            <label>{{sport?.name}}</label>
+                        </ng-template>
+                    </div>
+                    <small class="p-error" *ngIf="submitted && !product.sportType">Sport mező megadása kötelező.</small>
+
+                </div>
+            </div>
+
+            <div class="p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <b><label for="price">Ár</label></b>
+                    <p-inputNumber id="price" [(ngModel)]="product.price" mode="currency" currency="HUF" locale="hu-HU" [minFractionDigits]="0">
+                    </p-inputNumber>
+                    <small class="p-error" *ngIf="submitted && !product.price">Ár mező kitöltése kötelező.</small>
+
+                </div>
+                <div class="p-field p-col">
+                    <b><label for="quantity">Elérhető mennyiség</label></b>
+                    <p-inputNumber id="quantity" [(ngModel)]="product.unitsInStock"></p-inputNumber>
+                    <small class="p-error" *ngIf="submitted && !product.price">Elérhető mennyiség mező kitöltése
+                        kötelező.</small>
+
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Elvetés" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+            <button pButton pRipple label="Mentés" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button>
+        </ng-template>
+    </p-dialog>
+
+    <p-confirmDialog #cd [style]="{width: '450px'}">
+        <p-footer>
+            <button type="button" pButton icon="fa fa-times" label="Mégsem" (click)="cd.reject()"></button>
+            <button type="button" pButton icon="fa fa-check" label="Igen" (click)="cd.accept()"></button>
+        </p-footer>
+    </p-confirmDialog>
+
+</body>
+
+</html>

@@ -1,0 +1,190 @@
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<p-toast position="center"></p-toast>
+
+<body>
+    <div class="main-content">
+
+        <!-- Page content -->
+        <div class="container-fluid mt--7" style="padding-top: 100px;">
+            <div class="row">
+                <div class="col-xl-3 order-xl-1  bg-gradient-primary">
+                    <div class="menu-sidebar-content js-scrollbar1" style="overflow:auto;">
+                        <nav class="navbar-sidebar">
+                            <div class="align-items-center text-center" style="padding-top: 20px;">
+                                <h1 style="color:white;" class="text-center">FELHASZNÁLÓI FIÓK</h1>
+                                <h2 style="color: wheat;"><em>{{user.firstName}} {{user.lastName}}</em></h2>
+                            </div>
+                            <ul class="navbar-nav  sidebar-dark" style=" overflow-y:auto;">
+                                <hr class="sidebar-divider my-0">
+                                <!-- Sidebar - Brand -->
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/user/profile">
+                                        <span class="fa fa-user-circle" style="font-size: 1.3em;cursor:pointer"> Személyes adatok</span></a>
+                                </li>
+
+                                <hr class="sidebar-divider my-0">
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/user/cart-details">
+                                        <span class="fa fa-shopping-cart" style="font-size: 1.3em;cursor:pointer"> Kosaram</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/user/purhcases">
+
+                                        <span class="bi bi-bag-fill" style="font-size: 1.3em;cursor:pointer"> Vásárlásaim</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;">
+                                    <a class="nav-link" href="/user/training-sessions">
+                                        <span style="font-size: 1.3em;cursor:pointer"><span class="material-icons">
+                        directions_run
+                      </span> Edzéseim</span>
+                                    </a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+
+                                <!-- Nav Item - Tables -->
+                                <li class="nav-item text-center" style="padding: 1em 0em 1em 0em;  cursor: pointer;">
+                                    <a class="nav-link" (click)="logout()">
+                                        <span class="bi bi-chevron-bar-right" style="font-size: 1.3em;cursor:pointer"> Kilépés</span></a>
+                                </li>
+                                <hr class="sidebar-divider my-0">
+
+
+
+                                <!-- Divider -->
+                                <hr class="sidebar-divider d-none d-md-block">
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+                <div class="col-xl-9 order-xl-2 mb-5 mb-xl-0" *ngIf="!progressBarVisible">
+                    <div class="card bg-secondary shadow">
+                        <div class="card-header bg-white border-0">
+                            <div class="text-center">
+                                <h1 class="mb-0"><b>Vásárlásaim</b></h1>
+                            </div>
+                            <div class="card-body">
+                                <div *ngIf="transactions.length === 0 else elseBlock">
+                                    <div class="text-center main-content" style="padding-top: 3em; padding-bottom: 3em;">
+                                        <h1><em>Még nem történtek vásárlásaim</em></h1>
+                                    </div>
+                                </div>
+                                <ng-template #elseBlock>
+                                    <div class="table-responsive">
+                                        <p-table #dt dataKey="id" [value]="transactions" class="p-datatable-customers" width="100%" cellspacing="0" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" [(first)]="first" currentPageReportTemplate="Mutat {first}-{last}-ig {totalRecords}-ból"
+                                            [expandedRowKeys]="expandedRows" [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['user.firstName','user.lastName']" [loading]="loading" [scrollable]="true" (onPage)="scrollUp()">
+                                            <ng-template pTemplate="caption">
+                                                <div class="p-d-flex">
+                                                    <div class="p-d-flex p-ai-center p-jc-between" style="padding-left:20px;">
+                                                        Összesen {{transactions ? transactions.length : 0 }} vásárlás történt.
+                                                    </div>
+
+                                                </div>
+                                            </ng-template>
+                                            <ng-template pTemplate="header" style="width: 100%;">
+                                                <tr>
+                                                    <th style="width: 3em;"></th>
+                                                    <th pSortableColumn="transactionCreated">Dátum
+                                                        <p-sortIcon field="transactionCreated">
+                                                        </p-sortIcon>
+                                                    </th>
+                                                    <th pSortableColumn="trackingNumber">Azonosító szám
+                                                        <p-sortIcon field="trackingNumber">
+                                                        </p-sortIcon>
+                                                    </th>
+                                                    <th pSortableColumn="sumTotal">Vásárlás összege
+                                                        <p-sortIcon field="sumTotal">
+                                                        </p-sortIcon>
+                                                    </th>
+                                                    <th pSortableColumn="status">Státusz
+                                                        <p-sortIcon field="status">
+                                                        </p-sortIcon>
+                                                    </th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-transaction let-expanded="expanded">
+                                                <tr>
+                                                    <td style="width: 3em;">
+                                                        <button type="button" pButton pRipple [pRowToggler]="transaction" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                                    </td>
+                                                    <td>{{transaction.transactionCreated | date:'short':'+0100':'HU'}}</td>
+                                                    <td>{{transaction.trackingNumber}}</td>
+                                                    <td>{{transaction.sumTotal}} Ft</td>
+                                                    <td>
+                                                        <div *ngIf="transaction.status==='PENDING'">
+                                                            Feldolgozás alatt
+                                                        </div>
+                                                        <div *ngIf="transaction.status==='ON_DELIVERY'">
+                                                            Kiszálítás alatt
+                                                        </div>
+                                                        <div *ngIf="transaction.status==='COMPLETED'">
+                                                            Kiszállított
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="rowexpansion" let-transaction>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <div class="p-p-3" style="padding-left: 10%;">
+                                                            <h3>Vásárláshoz tartozó termékek</h3>
+                                                            <p-table [value]="transaction.transactionItems">
+                                                                <ng-template pTemplate="header">
+                                                                    <tr>
+                                                                        <th>Termék kép</th>
+                                                                        <th>Neve</th>
+                                                                        <th>Ára</th>
+                                                                        <th>Mennyiség</th>
+                                                                        <th>Összessen</th>
+                                                                    </tr>
+                                                                </ng-template>
+                                                                <ng-template pTemplate="body" let-item>
+                                                                    <tr>
+                                                                        <td><img src={{item.shopItem.imageString}} width="300" class="p-shadow-4" /></td>
+                                                                        <td>{{item.shopItem?.name}}</td>
+                                                                        <td>{{item.shopItem?.price}} Ft/darab</td>
+                                                                        <td>{{item.quantity}} darab</td>
+                                                                        <td>{{item.price}} Ft</td>
+                                                                    </tr>
+                                                                </ng-template>
+                                                            </p-table>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="summary">
+                                                <button class="scroll-to-top rounded" (click)="scrollUp()">
+                    <span style="font-size: larger;"> <i class="fa fa-angle-up"></i>Lap tetejére </span></button>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage">
+                                                <tr>
+                                                    <td colspan="4" class="text-center">
+                                                        <h2>Még nem történtek vásárlásaim</h2>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<p-confirmDialog key="logoutDialog" #cd2 [style]="{width: '450px'}">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-times" label="Mégsem" (click)="cd2.reject()"></button>
+        <button type="button" pButton icon="fa fa-check" label="Kijelentkezek" (click)="cd2.accept()"></button>
+    </p-footer>
+</p-confirmDialog>
+<div class="loading-indicator" *ngIf="progressBarVisible">
+    <mat-progress-spinner style="margin:0 auto;" mode="indeterminate">
+    </mat-progress-spinner>
+</div>

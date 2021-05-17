@@ -1,0 +1,298 @@
+<div class="loading-indicator" *ngIf="progressBarVisible">
+    <mat-progress-spinner style="margin:0 auto;" mode="indeterminate">
+    </mat-progress-spinner>
+</div>
+<div class="main-content" style="background-color: white;">
+    <div class="section-content section-content-p30" *ngIf="!progressBarVisible">
+        <div class="container-fluid">
+
+            <div *ngIf="cartItems.length == 0" class="alert alert-warning col-md-12 " role="alert" style="background-color: white;">
+                <div class="d-flex justify-content-center">
+                    <h1><b>A kosarad jelenleg üres.</b></h1>
+                </div>
+
+                <div class="d-flex justify-content-center" style="font-size: large;">
+                    <a routerLink="/products">
+                        <i class="fa fa-chevron-circle-left"></i> Menj vissza termékeinkhez, és keress magadnak valamit.
+                    </a>
+                </div>
+            </div>
+
+            <div *ngIf="cartItems.length != 0">
+                <h1 style="text-align: center;"><b>Kosaram</b></h1>
+
+                <mat-horizontal-stepper #stepper>
+                    <ng-template matStepperIcon="edit">
+                        <mat-icon>bubble_chart</mat-icon>
+                    </ng-template>
+                    <ng-template matStepperIcon="home">
+                        <mat-icon>home</mat-icon>
+                    </ng-template>
+                    <ng-template matStepperIcon="form">
+                        <mat-icon>format_align_center</mat-icon>
+                    </ng-template>
+                    <ng-template matStepperIcon="last">
+                        <mat-icon>done_all</mat-icon>
+                    </ng-template>
+                    <mat-step label="Termékek" state="home">
+                        <div *ngIf="cartItems.length > 0">
+
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <aside class="col-lg-9">
+                                        <div class="card">
+                                            <div class="table-responsive">
+                                                <table class="table table-borderless table-shopping-cart">
+                                                    <thead class="text-muted">
+                                                        <tr class="small text-uppercase">
+                                                            <th scope="col"></th>
+                                                            <th scope="col" width="120"></th>
+                                                            <th scope="col" width="200"></th>
+                                                            <th scope="col" class="text-right d-none d-md-block" width="200"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let tempCartItem of cartItems">
+                                                            <td>
+                                                                <figure class="itemside align-items-center">
+                                                                    <div class="aside"><img src={{tempCartItem.shopItem.imageString}} style="width: 250px;" class="p-shadow-4">
+                                                                    </div>
+                                                                    <figcaption class="info">
+                                                                        <a href="#" class="title text-dark" data-abc="true">
+                                                                            <h1><b>{{tempCartItem.shopItem.name}}</b>
+                                                                            </h1>
+                                                                        </a>
+                                                                        <p class="text-muted small">Kategória: {{tempCartItem.shopItem.category.categoryName}}
+                                                                            <br> Sport: {{tempCartItem.shopItem.sportType.name}}
+                                                                        </p>
+                                                                    </figcaption>
+                                                                </figure>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <label for="minmax-buttons">Mennyiség</label>
+                                                                <p-inputNumber [ngModel]="tempCartItem.quantity" [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="20" (onInput)="quantityChange(tempCartItem, tempCartItem.quantity, $event.value)">
+                                                                </p-inputNumber>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <div class="price-wrap"> <var class="price">összesen:
+                                                                        {{tempCartItem.quantity *
+                                                                        tempCartItem.shopItem.price}}Ft</var> <small class="text-muted">
+                                                                        {{tempCartItem.shopItem.price |
+                                                                        currency:'HUF':"symbol":"0.0":"hu"}}/db </small>
+                                                                </div>
+                                                            </td>
+                                                            <td class="text-right align-middle">
+                                                                <a (click)="remove(tempCartItem)" class="btn btn-light" data-abc="true">
+                                                                    <i class="fa fa-trash"></i> Eltávolítás</a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </aside>
+                                    <aside class="col-lg-3">
+
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <dl class="dlist-align">
+                                                    <dt>Összeg:</dt>
+                                                    <dd class="text-right ml-3"><b>{{totalPrice |
+                                                            currency:'HUF':"symbol":"0.0":"hu"}}</b></dd>
+                                                </dl>
+                                                <dl class="dlist-align">
+                                                    <dt>Szállítási költség:</dt>
+                                                    <dd class="text-right delivery-fee ml-3"> <strong>Ingyenes</strong>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="dlist-align">
+                                                    <dt>Összesen: </dt>
+                                                    <dd class="text-right text-dark b ml-3"><strong style="font-size:larger">{{totalPrice |
+                                                            currency:'HUF':"symbol":"0.0":"hu"}}</strong></dd>
+                                                </dl>
+                                                <hr> <button class="btn btn-out btn-success btn-main" matStepperNext>
+                                                    <i class="bi bi-cash"></i> Vásárlás
+                                                </button>
+                                                <a href="#" class="btn btn-out blue-btn btn-square btn-main mt-2" data-abc="true"> <i class="fa fa-chevron-left"></i> Vissza a termékekhez
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </aside>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-step>
+
+                    <mat-step label="Személyes adatok" state="form">
+                        <div style="padding:0% 15% !important">
+                            <div class="section-content">
+                                <div class="container-fluid">
+                                    <h1 class="text-center"><b><label>SZEMÉLYES ADATOK</label></b></h1>
+                                    <h2>Kérjük ellenőrizze meglévő adatai helyességét!</h2>
+                                    <form [formGroup]="cartFormGroup">
+                                        <div class="form-area">
+                                            <div formGroupName="name">
+                                                <div class="row" style="padding-bottom: 1em;">
+                                                    <div class="col-6">
+                                                        <div class="row">
+                                                            <div class="col-md-3 align-middle">
+                                                                <b><label>Vezetéknév</label></b>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <input type="text" pInputText [(ngModel)]="user.firstName" formControlName="firstName">
+                                                                <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="alert alert-danger mt-1">
+                                                                    <div *ngIf="firstName.errors.required || firstName.errors.notOnlyWhitespace">
+                                                                        <small id="username2-help" class="p-error">Vezetéknév megadása
+                                                                            kötelező!</small>
+                                                                    </div>
+                                                                    <div *ngIf="firstName.errors.minlength">
+                                                                        <small id="username2-help" class="p-error">Legalább
+                                                                            2 karakter hosszú legyen!</small>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="row">
+                                                            <div class="col-md-3"><b> <label>Keresztnév</label></b>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <input type="text" pInputText [(ngModel)]="user.lastName" formControlName="lastName">
+
+                                                                <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="alert alert-danger mt-1">
+                                                                    <div *ngIf="lastName.errors.required || lastName.errors.notOnlyWhitespace">
+                                                                        <small id="username2-help" class="p-error">Keresztnév megadása
+                                                                            kötelező!</small>
+                                                                    </div>
+                                                                    <div *ngIf="lastName.errors.minlength">
+                                                                        <small id="username2-help" class="p-error">Legalább
+                                                                            2 karakter hosszú legyen!</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div formGroupName="contact">
+
+                                                <div class="row" style="padding-bottom: 1em;">
+                                                    <div class="col-6">
+                                                        <div class="row">
+                                                            <div class="col-md-3"> <b><label>Email cím</label></b></div>
+                                                            <div class="col-md-8">
+                                                                <input type="text" [(ngModel)]="user.contactData.email" formControlName="email" pInputText>
+                                                                <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger mt-1">
+                                                                    <div *ngIf="email.errors.pattern">
+                                                                        <small id="username2-help" class="p-error">Helyes formátumú email-t
+                                                                            adjon meg!</small>
+                                                                    </div>
+                                                                    <div *ngIf="email.errors.required">
+                                                                        <small id="username2-help" class="p-error">Email
+                                                                            megadása kötelező!</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="row">
+                                                            <div class="col-md-3"><b> <label>Telefonszám</label></b>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <input type="text" pInputText [(ngModel)]="user.contactData.telNumber" formControlName="mobile" />
+                                                                <div *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)" class="alert alert-danger mt-1">
+                                                                    <div>
+                                                                        <small id="username2-help" class="p-error">9
+                                                                            szemjegyűnek kell lennie egy
+                                                                            telefonszámnak</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div formGroupName="address">
+
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="row">
+                                                            <div class="col-md-3"> <b><label>Város</label></b></div>
+
+                                                            <div class="col-md-8">
+                                                                <p-autoComplete id="city" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%','font-size': '1rem','display':'block',
+                                                                      'height':'calc(2.75rem + 2px)','padding':'.625rem .75rem','transition':'all .2s cubic-bezier(.68, -.55, .265, 1.55)',
+                                                                     'border':'1px solid #cad1d7','border-radius':'.375' }" [(ngModel)]="user.shippingAddress.city" field="cityName" class="form-control-alternative" formControlName="city" [suggestions]="filteredCities"
+                                                                    (completeMethod)="filterCity($event)" [dropdown]="true">
+                                                                    <ng-template let-city pTemplate="item">
+                                                                        <div>{{city.cityName}}</div>
+                                                                    </ng-template>
+                                                                </p-autoComplete>
+                                                                <div *ngIf="city.invalid && (city.dirty || city.touched)" class="alert alert-danger mt-1">
+                                                                    <div *ngIf="city.errors.required">
+                                                                        <small id="username2-help" class="p-error">Adja
+                                                                            meg
+                                                                            a
+                                                                            városát!</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="row">
+                                                            <div class="col-md-3"> <b><label>Utca</label></b></div>
+                                                            <div class="col-md-8">
+                                                                <input type="text" [ngModel]="user.shippingAddress && user.shippingAddress?.street" (ngModelChange)="user.shippingAddress.street=$event" formControlName="street" pInputText>
+                                                                <div *ngIf="street.invalid && (street.dirty || street.touched)" class="alert alert-danger mt-1">
+                                                                    <div>
+                                                                        <small id="username2-help" class="p-error">Utca
+                                                                            megadása kötelező</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="row">
+
+                                        <div class="col">
+                                            <button mat-button matStepperPrevious class="btn btn-out blue-btn btn-square mt-2 personal-data-button" style="height: 50px;" data-abc="true"> <i
+                                                    class="fa fa-chevron-left"></i> Vissza
+                                            </button>
+                                        </div>
+                                        <div class="col text-right">
+                                            <button class="btn btn-out btn-success mt-2 personal-data-button" style="background-color: #FFC312; color:black;" (click)="callPaypal(stepper)">
+                                                <b>Fizetés</b>
+                                                <i class="fa-cc-paypal fab" style="color: black; font-size: 30px;"></i>
+                                            </button>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </mat-step>
+
+                    <mat-step label="Fizetés" state="last">
+                    </mat-step>
+
+                </mat-horizontal-stepper>
+            </div>
+        </div>
+    </div>
+</div>
+<p-confirmDialog #cd [style]="{width: '450px'}">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-times" label="Mégsem" (click)="cd.reject()"></button>
+        <button type="button" pButton icon="fa fa-check" label="Igen" (click)="cd.accept()"></button>
+    </p-footer>
+</p-confirmDialog>

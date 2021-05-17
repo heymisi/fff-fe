@@ -1,0 +1,9 @@
+<div class="cart-area d-n">
+    <a (click)="onClick()" style="cursor: pointer;">
+        <i class="fa fa-shopping-cart" style="color: whitesmoke; padding-right: 20px;" aria-hidden="true"> Kosaram</i>
+        <div class="total">{{totalPrice | currency:'HUF':"symbol":"0.0":"hu"}}
+            <span> {{totalQuantity}}</span>
+        </div>
+    </a>
+</div>
+<p-toast position="center"></p-toast>

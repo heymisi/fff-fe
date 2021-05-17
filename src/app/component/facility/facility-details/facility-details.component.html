@@ -1,0 +1,191 @@
+<p-toast position="center">
+</p-toast>
+
+<div class="detail-section" style="padding-top: 80px;">
+    <div class="container">
+        <div class="picsum-img-wrapper" style="padding-bottom: 20px;">
+            <img class="card-img-top" src={{facility.profileImageString}} alt="Random first slide">
+        </div>
+        <h2>
+            <div class="row">
+                <div class="col-lg-6">
+                    <h1><b>{{facility?.name}}</b></h1>
+                    <div class="price"> <b>Címe:</b> {{facility?.address.city.cityName}}, {{facility?.address.street}}
+                        <span class="hiddentxt">térképen<span class="material-icons">place</span></span> <span class="hiddenimg">
+                            <img src={{facility.mapImageString}} width="1000px" />
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-6" style="text-align: right;">
+                    <div *ngIf="facility?.rating.counter === 0; else elseRating">
+                        Még nem értékelt
+                    </div>
+                    <ng-template #elseRating>
+                        <div>
+                            <ngb-rating [readonly]="true" [max]="5" [rate]="facility?.rating.value"> </ngb-rating>
+                            ({{facility?.rating.value}})
+                        </div>
+                        <pre>(<b>{{facility?.rating.counter}}</b> értékelés alapján)</pre>
+                    </ng-template>
+                </div>
+            </div>
+        </h2>
+
+        <mat-divider></mat-divider>
+        <div class="card-text">
+            <h2><b>Elérhetőségek:</b></h2>
+            <h3><b>Email:</b> {{facility?.contactData.email}}</h3>
+            <h3><b>Tel:</b> (+36) {{facility?.contactData.telNumber}}</h3>
+        </div>
+        <mat-divider></mat-divider>
+        <h2><b>Nyitvatartás:</b></h2>
+        <div *ngIf="isOpen; else elseBlock">
+            <h2 style="color: green; padding-left: 20px;">Jelenleg NYITVA</h2>
+        </div>
+        <ng-template #elseBlock>
+            <h2 style="color: red; padding-left: 20px;">Jelenleg ZÁRVA</h2>
+        </ng-template>
+        <div *ngFor="let theOpeningHours of openingHours">
+            <div class="row">
+                <div class="col-md-4 ">
+                    <div class="opening-hours">{{theOpeningHours.day}}:</div>
+                </div>
+                <div class="col-md-8 " style="padding-bottom: 10px;">
+                    <span *ngIf="theOpeningHours.openTime <= 12; else elseBlock">de.</span>
+                    <ng-template #elseBlock>du.</ng-template>{{theOpeningHours.openTime}} -
+                    <span *ngIf="theOpeningHours.closeTime > 12; else elseBlock">du.</span>
+                    <ng-template #elseBlock>de.</ng-template>{{theOpeningHours.closeTime}}
+                </div>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <h2 class="display-4"><b>Árazás:</b></h2>
+        <div class="card-deck mb-3 text-center">
+            <div class="card mb-4 box-shadow" *ngFor="let price of pricings">
+                <div class="card-header">
+                    <h2 class="my-0 font-weight-normal">{{price.ageGroup}}</h2>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title pricing-card-title">Alkalmi jegy: {{price.singleTicketPrice}} HUF<small class="text-muted">/ alkalom</small></h3>
+                    <h3 class="card-title pricing-card-title">Bérlet: {{price.sessionTicketPrice}} HUF<small class="text-muted">/ hónap</small></h3>
+                </div>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="row" style="padding-top: 20px;">
+            <div class="col-lg-6">
+                <h2><b>Oktatóink:</b></h2>
+                <div *ngIf="facility.instructors.length === 0; else elseInstructor">
+                    <span class="list-element">Nem érhető el oktató</span>
+                </div>
+                <ng-template #elseInstructor>
+                    <ul class="list-unstyled mb-0">
+                        <li *ngFor="let instructor of facility.instructors">
+                            <div class="row">
+                                <div class="col-lg-1">
+                                    <div mat-card-avatar class="example-header-image"></div>
+                                </div>
+                                <div class="col-lg-11">
+                                    <a routerLink="/instructors/{{instructor.id}}" style="padding-top: 10px;">{{instructor.user?.firstName}}
+                                        {{instructor.user?.lastName}}</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </ng-template>
+            </div>
+            <div class="col-lg-6">
+                <h2><b>Elérhető sportok:</b></h2>
+                <ul class="list-unstyled mb-0">
+                    <li class="list-element" *ngFor="let sport of sports">
+                        {{sport.name}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <hr>
+        <h2><b>Leírás:</b></h2>
+        <p>{{facility?.description}}</p>
+
+        <a class="mt-5" routerLink="/facilities" style="color: black;">
+            <i class="fa fa-chevron-circle-left">Vissza a többi sportlétesítményhez</i>
+        </a>
+        <mat-divider style="padding-bottom: 20px;"></mat-divider>
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <div class="col-12 col-sm-12 header">
+                            <h1 class="comm-header"><i class="material-icons">forum</i> Hozzászólások ({{facility?.comments?.length}})
+                            </h1>
+                        </div>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="card">
+                    <div class="commentbox">
+                        <div class="col-12 col-sm-12 body">
+                            <div class="comment-container">
+                                <div class="comment-form" *ngIf="isLoggedIn; else notLoggedIn">
+                                    <form [formGroup]="commentForm" (ngSubmit)="onComment()">
+                                        <div class="form-group">
+                                            <h2><em>Szeretné véleményét megosztani?</em></h2>
+                                            <h2>Értékelje:
+                                                <ngb-rating style="font-size: 2.2em;" formControlName="rate" [max]="5" [ngClass]="{ 'is-invalid': submitted && commentForm.controls['rate'].errors }">
+                                                </ngb-rating>
+                                                <div class="invalid-feedback" *ngIf="submitted && commentForm.controls['rate'].errors">
+                                                    <div *ngIf="commentForm.controls['rate'].errors.required">Kérjük értékelje 1-5ig ezt a terméket</div>
+
+                                                </div>
+                                            </h2>
+                                            <h2>
+                                                <textarea class="form-control" placeholder="Szólj hozzá" formControlName="message" style="height: 7em;" [ngClass]="{ 'is-invalid': submitted && commentForm.controls['message'].errors }"></textarea>
+                                                <div class="invalid-feedback" *ngIf="submitted && commentForm.controls['message'].errors">
+                                                    <div *ngIf="commentForm.controls['message'].errors.required">Kérjük írja le véleményét</div>
+                                                    <div *ngIf="commentForm.controls['message'].errors.minlength">
+                                                        Legalább 6 karakter hosszú véleményt írjon
+                                                    </div>
+                                                </div>
+                                            </h2>
+                                        </div>
+                                        <div class="form-group" style="text-align: right;">
+                                            <button type="submit" class="btn btn-success" style="background-color: green;">Küldés <i
+                                                    class="fa fa-share"></i></button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <ng-template #notLoggedIn>
+                                    <h1 style="text-align: center;"><em>Véleményed <a routerLink="/login">
+                                                bejelentkezés</a> után megoszhatod erről a létesítményről</em></h1>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-12 body">
+                            <div class="comment-container">
+                                <div class="comment-form">
+                                    <mat-card class="example-card" *ngFor="let comment of facility?.comments">
+                                        <mat-card-header>
+                                            <div mat-card-avatar class="example-header-image"></div>
+                                            <mat-card-title>{{comment?.commenter?.firstName}} {{comment?.commenter?.lastName}}
+                                            </mat-card-title>
+                                            <mat-card-subtitle>elküldve: {{comment.created | date:'short':'+0100':'HU'}}
+                                            </mat-card-subtitle>
+                                        </mat-card-header>
+                                        <mat-card-content style="font-size: larger;">
+                                            <div style="padding-bottom: 1.4em;"><b>Értékelése:</b>
+                                                <ngb-rating style="font-size: 1.7em;" [rate]="comment.rate" [readonly]="true" [max]="5"> </ngb-rating>
+                                                ({{comment.rate}})
+                                            </div>
+                                            <b>Megjegyzése:</b> {{comment.text}}
+                                        </mat-card-content>
+                                        <mat-divider></mat-divider>
+                                    </mat-card>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>

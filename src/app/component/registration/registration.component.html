@@ -1,0 +1,577 @@
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+    <div class="main-content">
+        <div class="container">
+            <div class="d-flex justify-content-center h-100">
+                <div class="card">
+                    <mat-tab-group mat-align-tabs="center">
+                        <mat-tab label="Felhasználó">
+                            <div class="card-header">
+                                <h1><b>Regisztráció Felhasználóként</b></h1>
+                                <i class="strict">*</i>-al jelölt mezők kitöltése kötelező!
+                            </div>
+                            <div class="card-body">
+                                <form [formGroup]="userFormGroup" (submit)="createUser()">
+                                    <div class="form-area">
+                                        <div formGroupName="customer">
+                                            <h3>Személyes Adatok <i class="fas fa-id-card"></i></h3>
+                                            <div class="input-group form-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-user"><i
+                                                                class="strict">*</i></i></span>
+                                                </div>
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Vezetéknév</mat-label>
+                                                    <input formControlName="firstName" matInput placeholder="Nagy" required>
+                                                    <mat-error>
+                                                        <ng-container *ngFor="let error of errors(userFirstName)">
+                                                            {{ errorMessagesName[error] }} <br>
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="input-group form-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-user"><i
+                                                                class="strict">*</i></i></span>
+                                                </div>
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Keresztnév</mat-label>
+                                                    <input formControlName="lastName" matInput placeholder="János" required>
+                                                    <mat-error>
+                                                        <ng-container *ngFor="let error of errors(userLastName)">
+                                                            {{ errorMessagesName[error] }} <br>
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="input-group form-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="material-icons">local_post_office</i>
+                                                        <i class="strict">*</i></span>
+                                                </div>
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Email cím</mat-label>
+                                                    <input formControlName="email" matInput required placeholder="pelda@gmail.com">
+                                                    <mat-error>
+                                                        <div *ngIf="userEmail.invalid && (userEmail.dirty || userEmail.touched)">
+                                                            <ng-container *ngFor="let error of errors(userEmail)">
+                                                                {{ errorMessagesEmail[error] }}
+                                                            </ng-container>
+                                                        </div>
+                                                    </mat-error>
+
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="input-group form-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="material-icons">
+                                                            settings_phone</i>
+                                                        <i class="strict">*</i></span>
+                                                </div>
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Telefon szám</mat-label>
+                                                    <span matPrefix>+36 &nbsp;</span>
+                                                    <input type="number" required class="not-show-spin" formControlName="mobile" matInput placeholder="702175709">
+                                                    <mat-error>
+                                                        <div *ngIf="userMobile.invalid && (userMobile.dirty || userMobile.touched)">
+                                                            <ng-container *ngFor="let error of errors(userMobile)">
+                                                                {{ errorMessagesMobile[error] }}
+                                                            </ng-container>
+                                                        </div>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div formGroupName="passwordFields">
+                                            <div class="input-group form-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-key"><i
+                                                                class="strict">*</i></i></span>
+                                                </div>
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Jelszó</mat-label>
+                                                    <input formControlName="password" matInput required [type]="hide ? 'password' : 'text' " (input)="onPasswordInput()">
+                                                    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
+                                                    </mat-icon>
+                                                    <mat-hint>A jelszó erőssége érdekében kérjük legalább 6 karakter hosszú legyen
+                                                    </mat-hint>
+                                                    <mat-error *ngIf="userPassword.hasError('required')">Kérjük adjon meg egy jelszót!</mat-error>
+                                                    <mat-error *ngIf="userPassword.hasError('minlength')">A jelszó legalább 6 karakter hosszú legyen!</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="input-group form-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-key"><i
+                                                                class="strict">*</i></i></span>
+                                                </div>
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Jelszó újra</mat-label>
+                                                    <input formControlName="passwordAgain" matInput required [type]="hide ? 'password' : 'text'" (input)="onPasswordInput()">
+                                                    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
+                                                    </mat-icon>
+                                                    <mat-error *ngIf="userPasswordAgain.hasError('required')">Kérjük adja meg a jelszót ismét!</mat-error>
+                                                    <mat-error *ngIf="userPasswordAgain.invalid && !userPasswordAgain.hasError('required')">
+                                                        A jelszavak nem egyeznek!</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div formGroupName="shippingAddress" class="form-area">
+                                        <h3>Szállítási Cím <i class="fas fa-truck"></i></h3>
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="material-icons">maps_home_work</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Ország</mat-label>
+                                                <mat-select formControlName="country" required>
+                                                    <mat-option *ngFor="let theCountry of countries" [value]="theCountry">
+                                                        {{ theCountry }}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-hint>Weboldalunk jelenleg csak Magyarországi felhasználókkal képes foglalkozni.
+                                                </mat-hint>
+                                                <mat-error *ngIf="userShippingCountry.invalid && (userShippingCountry.dirty || userShippingCountry.touched)">
+                                                    Kérjük válasszon Országot</mat-error>
+
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="material-icons">maps_home_work</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Megye</mat-label>
+                                                <input type="text" placeholder="Válassz megyét" matInput required formControlName="county" [matAutocomplete]="auto">
+                                                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                                    <mat-option *ngFor="let county of userFilteredShippingCounties | async" [value]="county">
+                                                        {{ county }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <mat-error *ngIf="userShippingCounty.invalid && (userShippingCounty.dirty || userShippingCounty.touched)">
+                                                    Kérjük válasszon Megyét</mat-error>
+
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="material-icons">maps_home_work</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Város</mat-label>
+                                                <input type="text" placeholder="Válassz Várost" matInput required formControlName="city" [matAutocomplete]="autos">
+                                                <mat-autocomplete autoActiveFirstOption #autos="matAutocomplete">
+                                                    <mat-option *ngFor="let city of userFilteredShippingCities | async" [value]="city">
+                                                        {{ city }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <mat-error *ngIf="userShippingCity.invalid && (userShippingCity.dirty || userShippingCity.touched)">
+                                                    Kérjük válasszon Várost</mat-error>
+
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="material-icons">maps_home_work</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Utca</mat-label>
+                                                <input formControlName="street" matInput required placeholder="Kossuth Lajos utca 30">
+                                                <mat-error *ngIf="userShippingStreet.invalid && (userShippingStreet.dirty || userShippingStreet.touched)">
+                                                    Kérjük ajdon meg utcát</mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center remember">
+                                        <input type="checkbox" (change)="copyShippingAddressToBillingAddress($event)">A Szállítási cím megegyezik a Szállítási címmel
+                                    </div>
+                                    <br>
+                                    <div formGroupName="billingAddress" class="form-area">
+                                        <h3>Számlázási Cím <i class="fas fa-clipboard"></i></h3>
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="material-icons">maps_home_work</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Ország</mat-label>
+                                                <mat-select formControlName="country" required>
+                                                    <mat-option *ngFor="let theCountry of countries" [value]="theCountry">
+                                                        {{ theCountry }}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-hint>Weboldalunk jelenleg csak Magyarországi felhasználókkal képes foglalkozni.
+                                                </mat-hint>
+                                                <mat-error *ngIf="userBillingCountry.invalid && (userBillingCountry.dirty || userBillingCountry.touched)">
+                                                    Kérjük válasszon Országot</mat-error>
+
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="material-icons">maps_home_work</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Megye</mat-label>
+                                                <input type="text" placeholder="Válassz megyét" matInput required formControlName="county" [matAutocomplete]="autoss">
+                                                <mat-autocomplete autoActiveFirstOption #autoss="matAutocomplete">
+                                                    <mat-option *ngFor="let county of userFilteredBillingCounties | async" [value]="county">
+                                                        {{ county }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <mat-error *ngIf="userBillingCounty.invalid && (userBillingCounty.dirty || userBillingCounty.touched)">
+                                                    Kérjük válasszon Megyét</mat-error>
+
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="material-icons">maps_home_work</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Város</mat-label>
+                                                <input type="text" placeholder="Válassz Várost" matInput required formControlName="city" [matAutocomplete]="autosss">
+                                                <mat-autocomplete autoActiveFirstOption #autosss="matAutocomplete">
+                                                    <mat-option *ngFor="let city of 
+                                                    userFilteredBillginCities | async" [value]="city">
+                                                        {{ city }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <mat-error *ngIf="userBillingCity.invalid && (userBillingCity.dirty || userBillingCity.touched)">
+                                                    Kérjük válasszon Várost</mat-error>
+
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="material-icons">maps_home_work</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Utca</mat-label>
+                                                <input formControlName="street" matInput required placeholder="Kossuth Lajos utca 30">
+                                                <mat-error *ngIf="userBillingStreet.invalid && (userBillingStreet.dirty || userBillingStreet.touched)">
+                                                    Kérjük ajdon meg utcát</mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+
+                                        <button class="btn float-right login_btn" type="submit">
+                                            <b>Felhasználói fiók létrehozása </b><i class="bi bi-person-plus-fill"></i>
+                                        </button>
+                                        <br>
+                                    </div>
+                                </form>
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Oktató">
+                            <div class="card-header">
+                                <h1><b>Regisztráció Edzőként</b></h1>
+                                <i class="strict">*</i>-al jelölt mezők kitöltése kötelező!
+                            </div>
+                            <div class="card-body">
+                                <form [formGroup]="instructorFormGroup" (submit)="createInstructor()">
+                                    <div class="form-area">
+                                        <div formGroupName="customer">
+
+                                            <h3>Személyes Adatok <i class="fas fa-id-card"></i></h3>
+                                            <div class="input-group form-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-user"><i
+                                                                class="strict">*</i></i></span>
+                                                </div>
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Vezetéknév</mat-label>
+                                                    <input formControlName="firstName" matInput placeholder="Nagy" required>
+                                                    <mat-error>
+                                                        <ng-container *ngFor="let error of errors(instructorFirstName)">
+                                                            {{ errorMessagesName[error] }} <br>
+                                                        </ng-container>
+                                                    </mat-error>
+
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="input-group form-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-user"><i
+                                                                class="strict">*</i></i></span>
+                                                </div>
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Keresztnév</mat-label>
+                                                    <input formControlName="lastName" matInput placeholder="János" required>
+                                                    <mat-error>
+                                                        <ng-container *ngFor="let error of errors(instructorLastName)">
+                                                            {{ errorMessagesName[error] }} <br>
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="input-group form-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="material-icons">local_post_office</i>
+                                                        <i class="strict">*</i></span>
+                                                </div>
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Email cím</mat-label>
+                                                    <input formControlName="email" matInput placeholder="pelda@gmail.com" required>
+                                                    <mat-error>
+                                                        <div *ngIf="instructorEmail.invalid && (instructorEmail.dirty || instructorEmail.touched)">
+                                                            <ng-container *ngFor="let error of errors(instructorEmail)">
+                                                                {{ errorMessagesEmail[error] }}
+                                                            </ng-container>
+                                                        </div>
+                                                    </mat-error>
+
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="input-group form-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="material-icons">
+                                                            settings_phone</i>
+                                                        <i class="strict">*</i></span>
+                                                </div>
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Telefon szám</mat-label>
+                                                    <span matPrefix>+36 &nbsp;</span>
+                                                    <input type="number" required class="not-show-spin" formControlName="mobile" matInput placeholder="702175709">
+                                                    <mat-error>
+                                                        <div *ngIf="instructorMobile.invalid && (instructorMobile.dirty || instructorMobile.touched)">
+                                                            <ng-container *ngFor="let error of errors(instructorMobile)">
+                                                                {{ errorMessagesMobile[error] }}
+                                                            </ng-container>
+                                                        </div>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                        </div>
+                                        <div formGroupName="passwordFields">
+                                            <div class="input-group form-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-key"><i
+                                                                class="strict">*</i></i></span>
+                                                </div>
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Jelszó</mat-label>
+                                                    <input formControlName="password" matInput required [type]="hide ? 'password' : 'text' " (input)="onPasswordInputInstructor()">
+                                                    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
+                                                    </mat-icon>
+                                                    <mat-hint>A jelszó erőssége érdekében kérjük legalább 6 karakter hosszú legyen
+                                                    </mat-hint>
+                                                    <mat-error *ngIf="instructorPassword.hasError('required')">Kérjük adjon meg egy jelszót!</mat-error>
+                                                    <mat-error *ngIf="instructorPassword.hasError('minlength')">A jelszó legalább 6 karakter hosszú legyen!</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="input-group form-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-key"><i
+                                                                class="strict">*</i></i></span>
+                                                </div>
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Jelszó újra</mat-label>
+                                                    <input formControlName="passwordAgain" matInput required [type]="hide ? 'password' : 'text'" (input)="onPasswordInputInstructor()">
+                                                    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
+                                                    </mat-icon>
+                                                    <mat-error *ngIf="instructorPasswordAgain.hasError('required')">
+                                                        Kérjük adja meg a jelszót ismét!</mat-error>
+                                                    <mat-error *ngIf="instructorPasswordAgain.invalid && !instructorPasswordAgain.hasError('required')">
+                                                        A jelszavak nem egyeznek!</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div formGroupName="activity" class="form-area">
+                                        <h3>Tevékenysége <i class="material-icons">directions_run</i></h3>
+                                        <p-fileUpload name="demo[]" [customUpload]=customUpload [auto]="true" (uploadHandler)="onFileChanged($event)" accept="image/*" chooseLabel="Profilkép feltöltés" [maxFileSize]="1000000">
+                                            <ng-template pTemplate="content">
+                                                <ul *ngIf="uploadedFiles.length">
+                                                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes
+                                                    </li>
+                                                </ul>
+                                            </ng-template>
+                                        </p-fileUpload>
+                                        <small class="p-error" *ngIf="submitted && !selectedFile">Kép felöltése
+                                            kötelező.</small>
+
+
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="material-icons">school</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Végzettség</mat-label>
+                                                <input formControlName="title" matInput placeholder="Fitness-wellness instruktor" required>
+                                                <mat-error *ngIf="instructorTitle.hasError('required')">Adja meg végzettségét
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="material-icons">
+                                                        sports_basketball
+                                                    </i><i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Oktatott sport(ok)</mat-label>
+                                                <mat-select multiple required formControlName="sport">
+                                                    <mat-option *ngFor="let sport of sports" [value]="sport">
+                                                        {{sport.name}}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="instructorSport.hasError('required')">Válassz sportot
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="material-icons">local_convenience_store</i>
+                                                    <i class="strict"></i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Sport létesítmény, ahol dolgozik(opcionális)</mat-label>
+                                                <mat-select formControlName="facility">
+                                                    <mat-option *ngFor="let facility of facilities" [value]="facility">
+                                                        {{facility.name}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="material-icons">article</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Oktatási tevéknységének rövid bemutatása</mat-label>
+                                                <textarea matInput required formControlName="bio"></textarea>
+                                                <mat-error *ngIf="instructorBio.hasError('required')">Adjon meg egy rövid bemutatkozást</mat-error>
+                                                <mat-error *ngIf="instructorBio.hasError('minlength')">Legalább 15 karakter hosszú legyen</mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+                                    <div formGroupName="shippingAddress" class="form-area">
+                                        <h3> Lakhelye <i class="fa fa-map-marker"></i></h3>
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="material-icons">maps_home_work</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Ország</mat-label>
+                                                <mat-select formControlName="country" required>
+                                                    <mat-option *ngFor="let theCountry of countries" [value]="theCountry">
+                                                        {{ theCountry }}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-hint>Weboldalunk jelenleg csak Magyarországi felhasználókkal képes foglalkozni.
+                                                </mat-hint>
+                                                <mat-error *ngIf="instructorShippingCountry.invalid && (instructorShippingCountry.dirty || instructorShippingCountry.touched)">
+                                                    Kérjük válasszon Országot</mat-error>
+
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="material-icons">maps_home_work</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Megye</mat-label>
+                                                <input type="text" placeholder="Válassz megyét" matInput required formControlName="county" [matAutocomplete]="autosInstr">
+                                                <mat-autocomplete autoActiveFirstOption #autosInstr="matAutocomplete">
+                                                    <mat-option *ngFor="let county of instructorFilteredCounties | async" [value]="county">
+                                                        {{ county }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <mat-error *ngIf="instructorShippingCounty.invalid && (instructorShippingCounty.dirty || instructorShippingCounty.touched)">
+                                                    Kérjük válasszon Megyét</mat-error>
+
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="material-icons">maps_home_work</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Város</mat-label>
+                                                <input type="text" placeholder="Válassz Várost" matInput required formControlName="city" [matAutocomplete]="autosInstrCity">
+                                                <mat-autocomplete autoActiveFirstOption #autosInstrCity="matAutocomplete">
+                                                    <mat-option *ngFor="let city of 
+                                                    instructorFilteredCities | async" [value]="city">
+                                                        {{ city }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                                <mat-error *ngIf="instructorShippingCity.invalid && (instructorShippingCity.dirty || instructorShippingCity.touched)">
+                                                    Kérjük válasszon Várost</mat-error>
+
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="input-group form-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                        class="material-icons">maps_home_work</i>
+                                                    <i class="strict">*</i></span>
+                                            </div>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Utca</mat-label>
+                                                <input formControlName="street" matInput placeholder="Kossuth Lajos utca 30" required>
+                                                <mat-error *ngIf="instructorShippingStreet.invalid && (instructorShippingStreet.dirty || instructorShippingStreet.touched)">
+                                                    Kérjük ajdon meg utcát</mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <button class="btn float-right login_btn" type="submit">
+                                            <b>fiók létrehozása </b><i class="bi bi-person-plus-fill"></i>
+                                        </button>
+                                    </div>
+                                    <br>
+                                </form>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p-confirmDialog #cd [style]="{width: '450px'}">
+        <p-footer>
+            <button type="button" pButton icon="fa fa-check" label="Rendben" (click)="cd.accept()"></button>
+        </p-footer>
+    </p-confirmDialog>
