@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ContactUsService {
 
-  private baseUrl = 'http://18.193.77.12:8080/fit-for-fun/email/contact-us';
+  private baseUrl = 'https://fitforfun-backend.herokuapp.com/email/contact-us';
 
   constructor(private httpClient: HttpClient) { }
 

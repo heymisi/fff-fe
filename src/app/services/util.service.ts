@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UtilService {
-  baseUrl = 'http://18.193.77.12:8080/fit-for-fun/';
+  baseUrl = 'https://fitforfun-backend.herokuapp.com/';
 
   constructor(private http: HttpClient) { }
 

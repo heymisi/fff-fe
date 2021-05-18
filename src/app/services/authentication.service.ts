@@ -17,7 +17,7 @@ export class AuthenticationService {
   login(email: string, password: string): Observable<LoginRespond> {
     let loginRequest: LoginRequest = { email: email, password: password };
 
-    return this.http.post<LoginRespond>('http://18.193.77.12:8080/fit-for-fun/users/login',
+    return this.http.post<LoginRespond>('https://fitforfun-backend.herokuapp.com/users/login',
       loginRequest).pipe(
         tap((resp: LoginRespond) => this.setSession(resp)),
         shareReplay()

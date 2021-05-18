@@ -10,7 +10,7 @@ import { Instructor } from '../common/instructor';
   providedIn: 'root'
 })
 export class FacilityService {
-  private baseUrl = 'http://18.193.77.12:8080/fit-for-fun/facilities';
+  private baseUrl = 'https://fitforfun-backend.herokuapp.com/facilities';
 
   constructor(private httpClient: HttpClient) { }
 

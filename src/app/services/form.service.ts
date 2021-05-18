@@ -9,8 +9,8 @@ import { County } from '../common/county';
 })
 export class FormService {
 
-  private countiesUrl = "http://18.193.77.12:8080/fit-for-fun/counties";
-  private citiesUrl = "http://18.193.77.12:8080/fit-for-fun/cities";
+  private countiesUrl = "https://fitforfun-backend.herokuapp.com/address/counties";
+  private citiesUrl = "https://fitforfun-backend.herokuapp.com/address/cities";
 
   constructor(private httpClient: HttpClient) { }
 

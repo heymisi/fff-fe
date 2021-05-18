@@ -13,7 +13,7 @@ import { User } from '../common/user';
 })
 export class InstructorService {
 
-  private baseUrl = 'http://18.193.77.12:8080/fit-for-fun/instructors';
+  private baseUrl = 'https://fitforfun-backend.herokuapp.com/instructors';
 
   constructor(private httpClient: HttpClient) { }
 

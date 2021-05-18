@@ -7,7 +7,7 @@ import { Sport } from '../common/sport';
   providedIn: 'root'
 })
 export class SportService {
-  private baseUrl = 'http://18.193.77.12:8080/fit-for-fun/sports';
+  private baseUrl = 'https://fitforfun-backend.herokuapp.com/sports';
 
   constructor(private http: HttpClient) { }
 

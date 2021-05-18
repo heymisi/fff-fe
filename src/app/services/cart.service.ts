@@ -41,15 +41,15 @@ export class CartService {
   }
 
   remove(userId: number, itemId: number) {
-    return this.httpClient.get<any>(`http://18.193.77.12:8080/fit-for-fun/cart/${userId}/deleteFromCart/${itemId}`);
+    return this.httpClient.get<any>(`https://fitforfun-backend.herokuapp.com/cart/${userId}/deleteFromCart/${itemId}`);
   }
   addItemToCart(userId: number, item: TransactionItemRequestModel): Observable<any> {
-    return this.httpClient.post<any>(`http://18.193.77.12:8080/fit-for-fun/cart/addToCart/${userId}`, item);
+    return this.httpClient.post<any>(`https://fitforfun-backend.herokuapp.com/cart/addToCart/${userId}`, item);
   }
   incrementQuantity(cartItemId: number): Observable<any> {
-    return this.httpClient.get<any>(`http://18.193.77.12:8080/fit-for-fun/cart/${cartItemId}/incrementTransactionItemQuantity`);
+    return this.httpClient.get<any>(`https://fitforfun-backend.herokuapp.com/cart/${cartItemId}/incrementTransactionItemQuantity`);
   }
   decrementQuantity(cartItemId: number): Observable<any> {
-    return this.httpClient.get<any>(`http://18.193.77.12:8080/fit-for-fun/cart/${cartItemId}/decrementTransactionItemQuantity`);
+    return this.httpClient.get<any>(`https://fitforfun-backend.herokuapp.com/cart/${cartItemId}/decrementTransactionItemQuantity`);
   }
 }

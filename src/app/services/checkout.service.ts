@@ -8,7 +8,7 @@ import { Transaction } from '../common/transaction';
 })
 export class CheckoutService {
 
-  private transactionUrl = 'http://18.193.77.12:8080/fit-for-fun/transaction/purchase';
+  private transactionUrl = 'https://fitforfun-backend.herokuapp.com/transaction/purchase';
 
   constructor(private httpClient: HttpClient) { }
 

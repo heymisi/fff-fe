@@ -16,8 +16,8 @@ import { CommentRequestModel } from '../common/comment-request-model';
 export class ProductService {
 
 
-  private baseUrl = 'http://18.193.77.12:8080/fit-for-fun/shop-items';
-  private categorytUrl = 'http://18.193.77.12:8080/fit-for-fun/item-categories';
+  private baseUrl = 'https://fitforfun-backend.herokuapp.com/shop-items';
+  private categorytUrl = 'https://fitforfun-backend.herokuapp.com/item-categories';
 
   constructor(private httpClient: HttpClient) { }
 

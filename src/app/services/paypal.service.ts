@@ -7,7 +7,7 @@ import { Order } from '../common/order';
 })
 export class PaypalService {
 
-  private baseUrl = 'http://18.193.77.12:8080/fit-for-fun/paypal';
+  private baseUrl = 'https://fitforfun-backend.herokuapp.com/paypal';
 
   constructor(private http: HttpClient) { }
 

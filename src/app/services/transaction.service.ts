@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class TransactionService {
 
-  baseUrl = 'http://18.193.77.12:8080/fit-for-fun/transaction';
+  baseUrl = 'https://fitforfun-backend.herokuapp.com/transaction';
   constructor(private httpClient: HttpClient) { }
 
   getTransactions(): Observable<any> {

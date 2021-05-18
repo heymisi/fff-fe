@@ -7,7 +7,7 @@ import { TrainingSession } from '../common/training-session';
   providedIn: 'root'
 })
 export class TrainingSessionService {
-  private baseUrl = 'http://18.193.77.12:8080/fit-for-fun/trainingSessions';
+  private baseUrl = 'https://fitforfun-backend.herokuapp.com/trainingSessions';
 
   constructor(private http: HttpClient) { }
 

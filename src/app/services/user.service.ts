@@ -18,11 +18,11 @@ const httpOptions = {
 })
 export class UserService {
 
-  baseUrl = 'http://18.193.77.12:8080/fit-for-fun/users';
+  baseUrl = 'https://fitforfun-backend.herokuapp.com/users';
   constructor(private httpClient: HttpClient) { }
 
   login(creds: LoginRequest) {
-    return this.httpClient.post<any>('http://18.193.77.12:8080/fit-for-fun/login', creds, httpOptions);
+    return this.httpClient.post<any>('https://fitforfun-backend.herokuapp.com/login', creds, httpOptions);
 
   }
   createUser(user: UserRegistrationModel): Observable<any> {
