@@ -1,5 +1,5 @@
 <div class="main-content" style="background-color: white;">
-    <div class="section-content section-content-p30" *ngIf="!progressBarVisible">
+    <div class="section-content section-content-p30">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3 side">
@@ -55,7 +55,7 @@
                 </div>
 
                 <!-- Blog Entries Column -->
-                <div class="col-md-9">
+                <div class="col-md-9" *ngIf="!progressBarVisible">
                     <div class="p-4 p-md-12 mb-4 text-white rounded" style="background-color: #205b8d;">
                         <div class="col-md-6 px-0">
                             <h1 class="display-4 fst-italic" style="color: antiquewhite;">Böngésszen Sportlétesítményeink között!

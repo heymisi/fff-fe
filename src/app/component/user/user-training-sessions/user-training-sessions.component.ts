@@ -1,3 +1,4 @@
+import { WeekDay } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -14,7 +15,7 @@ import { TrainingSessionService } from 'src/app/services/training-session.servic
   styleUrls: ['./user-training-sessions.component.css']
 })
 export class UserTrainingSessionsComponent implements OnInit {
-
+  progressBarVisible: boolean = true;
   trainingSessions: TrainingSession[];
   user: User = null;
   constructor(private trainingSessionService: TrainingSessionService,
@@ -66,6 +67,7 @@ export class UserTrainingSessionsComponent implements OnInit {
               })
             })
             this.sortTrainingSessions();
+            this.progressBarVisible = false;
           })
         })
     })
@@ -83,11 +85,22 @@ export class UserTrainingSessionsComponent implements OnInit {
       header: 'Megerősítés',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.trainingSessionService.deleteTrainingSessionForUser(+this.user.id, trainingSession.id).subscribe(
-        )
-        this.trainingSessions = this.trainingSessions.filter(val => val.id !== trainingSession.id);
-        this.messageService.add({ severity: 'success', summary: 'Lemondva', detail: 'Sikeresen lemondtad ezt az edzést ', life: 3000 });
-        location.reload();
+        this.progressBarVisible = true;
+        this.trainingSessionService.deleteTrainingSessionForUser(+this.user.id, trainingSession.id).subscribe( data=>{
+          for(let i = 0 ; i< this.weekDays.length; i++){
+            for(let j = 0 ; j< this.weekDays[i].value.length; j++){
+              if(this.weekDays[i].value[j].id === trainingSession.id){
+                this.weekDays[i].counter--;
+              }
+            }
+            this.weekDays[i].value = this.weekDays[i].value.filter(val => val.id !== trainingSession.id);
+          }
+          
+          this.trainingSessions = this.trainingSessions.filter(val => val.id !== trainingSession.id);
+          this.progressBarVisible = false;
+          this.messageService.add({ severity: 'success', summary: 'Lemondva', detail: 'Sikeresen lemondtad ezt az edzést ', life: 3000 });
+         })
+       
       }
     });
   }

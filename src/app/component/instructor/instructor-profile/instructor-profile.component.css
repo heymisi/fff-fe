@@ -3221,3 +3221,7 @@ h2 {
     width: 90%;
     vertical-align: bottom;
 }
+
+.p-error {
+    font-size: larger;
+}

@@ -18,7 +18,7 @@ const httpOptions = {
 })
 export class UserService {
 
-  baseUrl = 'https://fitforfun-backend.herokuapp.com/users';
+  baseUrl = 'https://fitforfun-backend.herokuapp.co/users';
   constructor(private httpClient: HttpClient) { }
 
   login(creds: LoginRequest) {
@@ -37,6 +37,9 @@ export class UserService {
   }
   getUser(id: number): Observable<any> {
     return this.httpClient.get<any>(`${this.baseUrl}/${id}`);
+  }
+  getUsersWithUserRole(): Observable<any> {
+    return this.httpClient.get<any>(this.baseUrl + "/byRole");
   }
   modifyUser(id: number, user: User): Observable<any> {
     return this.httpClient.put<any>(`${this.baseUrl}/${id}`, user);

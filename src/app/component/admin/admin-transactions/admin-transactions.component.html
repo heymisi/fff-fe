@@ -81,7 +81,13 @@
                                             <td style="width: 4rem;">
                                                 <button type="button" pButton pRipple [pRowToggler]="transaction" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                                             </td>
-                                            <td>{{transaction.purchaser?.firstName}} {{transaction.purchaser?.lastName}}
+                                            <td>
+                                                <div *ngIf="transaction.purchaser; else elseUser">
+                                                    {{transaction.purchaser?.firstName}} {{transaction.purchaser?.lastName}}
+                                                </div>
+                                                <ng-template #elseUser>
+                                                    <em>Törölt felhasználó</em>
+                                                </ng-template>
                                             </td>
                                             <td>{{transaction.trackingNumber}}</td>
                                             <td>{{transaction.sumTotal | currency:'HUF':"symbol":"3.0-2":"hu"}}</td>

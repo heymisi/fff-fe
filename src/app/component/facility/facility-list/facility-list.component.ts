@@ -94,18 +94,22 @@ export class FacilityListComponent implements OnInit {
   }
 
   listFacilites() {
+    this.progressBarVisible = true;
     this.facilityService.getFacilitiesWithFilter(this.pageNumber - 1,
       this.pageSize,
       this.name.value,
       this.city.value,
-      this.selectedSport
     ).subscribe(
       this.proccessResult())
   }
 
   handleFacilitySportFilter(sport: any) {
-    this.selectedSport = sport.name;
-    this.listFacilites();
+    this.progressBarVisible = true;
+    this.facilityService.getFacilityBySport(this.pageNumber - 1,
+      this.pageSize,
+      sport.name).subscribe(
+        this.proccessResult()
+      );
   }
 
   proccessResult() {

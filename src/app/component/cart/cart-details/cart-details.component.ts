@@ -120,36 +120,18 @@ export class CartDetailsComponent implements OnInit {
   }
 
   incrementQuantity(cartItem: TransactionItem) {
+    this.totalPrice += cartItem.shopItem.price;
     this.cartService.incrementQuantity(cartItem.id).subscribe(data => {
-      this.computeQuantityChangeValue(data);
     })
   }
 
   decremantQuantity(cartItem: TransactionItem) {
+    this.totalPrice -= cartItem.shopItem.price;
     this.cartService.decrementQuantity(cartItem.id).subscribe(data => {
-      this.computeQuantityChangeValue(data);
     });
   }
 
-  computeQuantityChangeValue(data: any) {
-    for (let i = 0; i < this.cartItems.length; i++) {
-      if (this.cartItems[i].id === data.payload.id) {
-        this.cartItems[i] = data.payload;
-        this.shopItems.forEach(shopItem => {
-          if (this.cartItems[i].shopItem === shopItem.id) {
-            this.cartItems[i].shopItem = shopItem;
-            return;
-          }
-        })
-      }
-    }
-    this.authService.getUser().subscribe(loggedInUser => {
-      this.cartService.computeCartTotals(loggedInUser);
-      this.cartService.totalPrice.subscribe(
-        data => this.totalPrice = data
-      );
-    })
-  }
+
 
   remove(cartItem: TransactionItem) {
     this.confirmationService.confirm({
@@ -157,15 +139,15 @@ export class CartDetailsComponent implements OnInit {
       header: 'Megerősítés',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.cartService.remove(+this.user.id, cartItem.id).subscribe(data => {
+        this.progressBarVisible = true;
+        this.totalPrice -= cartItem.price;
+        this.cartService.remove(cartItem,+this.user.id, cartItem.id).subscribe(data => {
+          this.progressBarVisible = false;
           this.cartItems = this.cartItems.filter(val => val.id !== cartItem.id);
+          this.cartService.totalPrice.next(data.payload.totalPrice);
+          this.cartService.totalQuantity.next(data.payload.cartItemQuantity)
         });
-        location.reload();
       },
-      reject: () => {
-        cartItem.quantity = 1;
-        location.reload();
-      }
     });
 
   }
@@ -174,7 +156,7 @@ export class CartDetailsComponent implements OnInit {
       this.user = loggedInUser;
       return new Promise(resolve => setTimeout(() => resolve(loggedInUser), 500));
     })).subscribe(value => {
-      this.utilService.getTransactionItems().pipe(concatMap(trItems => {
+      this.utilService.getTransactionItems().subscribe(trItems => {
         trItems.forEach(trItem => {
           for (let i = 0; i < this.user.cart.transactionItems.length; i++) {
             if (this.user.cart.transactionItems[i] === trItem.id) {
@@ -182,8 +164,6 @@ export class CartDetailsComponent implements OnInit {
             }
           }
         })
-        return new Promise(resolve => setTimeout(() => resolve(trItems), 500));
-      })).subscribe(value => {
         this.utilService.getShopItems().subscribe(items => {
           this.shopItems = items;
           items.forEach(item => {
@@ -193,21 +173,39 @@ export class CartDetailsComponent implements OnInit {
               }
             }
           })
+          this.progressBarVisible = false;
         })
         this.cartItems = this.user.cart.transactionItems;
         this.totalPrice = this.user.cart.totalPrice;
-        this.progressBarVisible = false;
-      }
-      )
+      })
     })
   }
-  
+
   callPaypal(stepper: MatStepper) {
     if (this.cartFormGroup.invalid) {
       this.cartFormGroup.markAllAsTouched();
       return;
     }
-    this.updateUser();
+    this.updateUser(stepper);
+
+  }
+
+  updateUser(stepper: any) {
+    if (this.cartFormGroup.dirty) {
+      let userModelForUpdate = new UserUpdateInTransactionModel;
+      userModelForUpdate.firstName = this.firstName.value;
+      userModelForUpdate.lastName = this.lastName.value;
+      userModelForUpdate.email = this.email.value;
+      userModelForUpdate.telNumber = this.mobile.value;
+      userModelForUpdate.street = this.street.value;
+      userModelForUpdate.city = this.city.value.cityName;
+      this.userService.modifyUserDuringTransaction(+this.user.id, userModelForUpdate).subscribe(data => {
+      });
+    }
+    this.afterPay(stepper);
+  }
+
+  afterPay(stepper: any) {
     stepper.next();
     this.cartItems.forEach(item => {
       item.shopItem.transactionItems = [];
@@ -218,19 +216,6 @@ export class CartDetailsComponent implements OnInit {
     this.checkoutService.placeOrder(+this.user.id).subscribe();
     this.paypalService.makePayment(order).then(
       value => window.location.href = value.redirect_url);
-  }
-
-  updateUser() {
-    if (this.cartFormGroup.dirty) {
-      let userModelForUpdate = new UserUpdateInTransactionModel;
-      userModelForUpdate.firstName = this.firstName.value;
-      userModelForUpdate.lastName = this.lastName.value;
-      userModelForUpdate.email = this.email.value;
-      userModelForUpdate.telNumber = this.mobile.value;
-      userModelForUpdate.street = this.street.value;
-      userModelForUpdate.city = this.city.value.cityName;
-      this.userService.modifyUserDuringTransaction(+this.user.id, userModelForUpdate).subscribe();
-    }
   }
 
 }

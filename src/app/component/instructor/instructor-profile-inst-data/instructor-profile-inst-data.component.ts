@@ -28,6 +28,7 @@ export class InstructorProfileInstDataComponent implements OnInit {
   instructor: Instructor = null;
   sports: Sport[];
   facilities: Facility[];
+  progressBarVisible: boolean = true;
 
   constructor(private instructorService: InstructorService,
     private sportService: SportService,
@@ -63,6 +64,7 @@ export class InstructorProfileInstDataComponent implements OnInit {
               }
             })
           })
+          this.progressBarVisible = false;
         })
     })
   }

@@ -36,7 +36,7 @@
             <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
               [(ngModel)]="sportFilter">
               <mat-radio-button class="example-margin" *ngFor="let sport of sports" [value]="sport">
-                {{sport.name}}
+                {{sport.name}}<br />
               </mat-radio-button>
             </mat-radio-group>
           </span>

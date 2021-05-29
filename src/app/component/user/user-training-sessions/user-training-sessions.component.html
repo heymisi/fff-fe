@@ -78,7 +78,7 @@
                                             <div class="timetable">
                                                 <mat-tab-group color="primary" backgroundColor="primary">
                                                     <mat-tab *ngFor="let day of weekDays" [label]="day.day" style="width: 100%;">
-                                                        <div class="tab-content" style="padding-bottom: 2em; overflow: hidden;">
+                                                        <div class="tab-content" style="padding-bottom: 2em; overflow: hidden;" *ngIf="!progressBarVisible">
                                                             <div class="tab-pane show active">
                                                                 <div *ngIf="day.counter == 0" class="text-center" style="padding-top:4em;">
                                                                     <h2>Ezen a napon nincsenek edzéseim</h2>
@@ -114,7 +114,7 @@
                                                                                         <div class="timetable-item-time">
                                                                                             {{session.name}} &emsp;&ensp;
                                                                                             <span class="timetable-item-name" *ngIf="session.trainingSessionType === 'Csoportos edzés'">
-                                                                                                ({{session.trainingSessionType}})
+                                                                                                ({{session.trainingSessionType}} - létszám: {{session.maxClientNumber}}/{{session.client.length}})
                                                                                             </span>
                                                                                             <span class="timetable-item-name" *ngIf="session.trainingSessionType === 'Személyi edzés'">
                                                                                                 ({{session.trainingSessionType}})</span>
@@ -143,6 +143,10 @@
         </div>
     </div>
 </body>
+<div class="loading-indicator" *ngIf="progressBarVisible">
+    <mat-progress-spinner style="margin:0 auto;" mode="indeterminate">
+    </mat-progress-spinner>
+</div>
 <p-confirmDialog #cd [style]="{width: '450px'}">
     <p-footer>
         <button type="button" pButton icon="fa fa-times" label="Mégsem" (click)="cd.reject()"></button>

@@ -42,7 +42,9 @@
                                     </ng-template>
                                     <ng-template pTemplate="header">
                                         <tr>
-                                            <th>Kép</th>
+                                            <th style="width: 3rem">
+                                            </th>
+                                            <th style="width: 200px;">Kép</th>
 
                                             <th pSortableColumn="user.firstName">Név
                                                 <p-sortIcon field="user.firstName">
@@ -54,12 +56,11 @@
                                             </th>
                                             <th>Telefonszám
                                             </th>
-                                            <th pSortableColumn="rating">Értékelés
-                                                <p-sortIcon field="rating">
+                                            <th pSortableColumn="rating.value">Értékelés
+                                                <p-sortIcon field="rating.value">
                                                 </p-sortIcon>
                                             </th>
                                             <th>Titulus</th>
-                                            <th>Bemutatkozás</th>
                                             <th>Sportok</th>
                                             <th pSortableColumn="sportFacility.name">Sportlétesítmény
                                                 <p-sortIcon field="sportFacility.name">
@@ -67,23 +68,25 @@
                                             </th>
                                         </tr>
                                     </ng-template>
-                                    <ng-template pTemplate="body" let-instructor>
+                                    <ng-template pTemplate="body" let-instructor let-expanded="expanded">
                                         <tr>
+                                            <td style="width:3rem">
+                                                <button type="button" pButton pRipple [pRowToggler]="instructor" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                            </td>
                                             <td style="height: 200px; width: 200px;"><img src={{instructor.imageString}} class="p-shadow-4" /></td>
                                             <td>{{instructor.user.firstName}} {{instructor.user.lastName}}</td>
                                             <td>{{instructor.user.contactData?.email}}</td>
                                             <td>
-                                                <span>{{instructor.user.shippingAddress?.country}}
+                                                <span>{{instructor.user.shippingAddress?.country}},
                                                     {{instructor.user.shippingAddress?.city.cityName}}
                                                     {{instructor.user.shippingAddress?.street}}</span>
                                             </td>
                                             <td>{{instructor.user.contactData?.telNumber}}</td>
                                             <td>
-                                                <p-rating [ngModel]="instructor.rating" [readonly]="true" [cancel]="false">
+                                                <p-rating [ngModel]="instructor.rating.value" [readonly]="true" [cancel]="false">
                                                 </p-rating>
                                             </td>
                                             <td>{{instructor.title}}</td>
-                                            <td>{{instructor.bio}}</td>
                                             <td>
                                                 <div *ngFor="let sport of instructor.knownSports">
                                                     <div>{{sport.name}}</div>
@@ -95,6 +98,12 @@
                                                 <ng-template #elseFacility><em>Nincs</em></ng-template>
                                             </td>
                                         </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="rowexpansion" let-instructor>
+                                        <td colspan="9" style="padding:0 0 20px 50px;">
+                                            <h2>Bemutatkozás:</h2>
+                                            <div> {{instructor.bio}}</div>
+                                        </td>
                                     </ng-template>
                                     <ng-template pTemplate="summary">
                                         <button class="scroll-to-top rounded" (click)="scrollUp()">

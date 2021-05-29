@@ -21,20 +21,22 @@ export class InstructorService {
     return this.httpClient.get<any>(this.baseUrl);
   }
   getInstructorsWithFilter(thePage: number, thePageSize: number,
-    name: string, address: string, sport: string
+    name: string, address: string
   ): Observable<any> {
     let searchUrl: any;
     searchUrl = `${this.baseUrl}` + `?page=${thePage}&limit=${thePageSize}`;
 
     let nameFilter: any;
     let addressFilter: any;
-    let sportFilter: any;
     name ? nameFilter = name : nameFilter = ""
     address ? addressFilter = address : addressFilter = ""
-    sport ? sportFilter = sport : sportFilter = ""
 
-    searchUrl = searchUrl + `&name=${nameFilter}&address=${addressFilter}&sport=${sportFilter}`
+    searchUrl = searchUrl + `&name=${nameFilter}&address=${addressFilter}`
     return this.httpClient.get<any>(searchUrl);
+  }
+
+  getInstructorBySport(thePage: number, thePageSize: number, sport: string): Observable<any> {
+    return this.httpClient.get<any>(`${this.baseUrl}/bySport?sport=${sport}`);
   }
 
   getInstructor(instructorId: number): Observable<any> {
@@ -95,7 +97,7 @@ export class InstructorService {
   createInstructor(instructor: InstructorRegistrationModel): Observable<any> {
     return this.httpClient.post<any>(`${this.baseUrl}`, instructor);
   }
-  
+
   addImage(id: number, file: any): Observable<any> {
     return this.httpClient.post<any>(`${this.baseUrl}/${id}/uploadImage`, file);
   }

@@ -210,7 +210,7 @@ export class RegistrationComponent implements OnInit {
       header: 'Sikeres Regisztráció',
       icon: 'pi pi-check',
       accept: () => {
-        this.router.navigateByUrl("/home");
+        this.router.navigateByUrl("/login");
       }
     });
   }
@@ -328,7 +328,7 @@ export class RegistrationComponent implements OnInit {
       activity: this.formBuilder.group({
         title: new FormControl('', [Validators.required]),
         sport: new FormControl('', [Validators.required]),
-        facility: new FormControl('', [Validators.required]),
+        facility: new FormControl('', []),
         bio: new FormControl('', [Validators.required, Validators.minLength(15)]),
       })
     });
@@ -371,7 +371,7 @@ export class RegistrationComponent implements OnInit {
       header: 'Sikeres Regisztráció',
       icon: 'pi pi-check',
       accept: () => {
-        this.router.navigateByUrl("/home");
+        this.router.navigateByUrl("/login");
       }
     });
   }

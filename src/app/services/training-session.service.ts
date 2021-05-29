@@ -17,6 +17,9 @@ export class TrainingSessionService {
   getTrainingSessionByInstructor(instructorId: number): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/instructor/${instructorId}`);
   }
+  getTrainingSessionByInstructorAndAvalability(instructorId: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${instructorId}/byInstructorAndAvailable`);
+  }
   deleteTrainingSession(id: number): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/${id}`);
   }

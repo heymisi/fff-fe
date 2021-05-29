@@ -49,6 +49,7 @@ export class ProductListComponent implements OnInit {
   }
 
   listProducts() {
+    this.progressBarVisible = true;
     this.searchMode = this.route.snapshot.paramMap.has("keyword");
     if (this.searchMode) {
       this.handleSearchProducts();
@@ -106,9 +107,9 @@ export class ProductListComponent implements OnInit {
       cartItem.shopItem = product;
       cartItem.quantity = 1;
       this.cartService.addToCart(cartItem);
-      this.messageService.add({ severity: 'success', summary: 'Kosárba helyezve', detail: `${product.name} sikeresen hozzáadva a kosarához!`, life: 4000 });
+      this.messageService.add({key: 'product', severity: 'success', summary: 'Kosárba helyezve', detail: `${product.name} sikeresen hozzáadva a kosarához!`, life: 4000 });
     } else {
-      this.messageService.add({ severity: 'error', summary: 'Jelentkezz be', detail: `Termék kosárba helyezése csak bejelentkezés után érhető el`, life: 4000 });
+      this.messageService.add({key: 'product', severity: 'error', summary: 'Jelentkezz be', detail: `Termék kosárba helyezése csak bejelentkezés után érhető el`, life: 4000 });
     }
   }
 

@@ -23,7 +23,7 @@ export class UserPurchasesComponent implements OnInit {
   expandedRows: {} = {};
   loading: boolean = true;
   user: User = null;
-  progressBarVisible: boolean = false;
+  progressBarVisible: boolean = true;
 
   constructor(private transactionService: TransactionService,
     private productService: ProductService,
@@ -40,17 +40,11 @@ export class UserPurchasesComponent implements OnInit {
   }
 
   getTransactions(ref: any) {
-    this.authService.getUser().pipe(concatMap(user => {
+    this.authService.getUser().subscribe(user => {
       this.user = user;
-      return new Promise(resolve => setTimeout(() => resolve(user), 500));
-    })).subscribe(value => {
-      this.transactionService.getTransactionsByUser(+this.user.id).pipe(concatMap(
-        data => {
-          this.transactions = data;
-          return new Promise(resolve => setTimeout(() => resolve(data), 500));
-        }
-      )).subscribe((value: any) => {
-        this.transactionService.getTransactionItems().pipe(concatMap(
+      this.transactionService.getTransactionsByUser(+this.user.id).subscribe(trans => {
+        this.transactions = trans;
+        this.transactionService.getTransactionItems().subscribe(
           transItem => {
             transItem.forEach(item => {
               this.transactions.forEach(transaction => {
@@ -72,22 +66,20 @@ export class UserPurchasesComponent implements OnInit {
                     })
                   })
                 })
+                this.progressBarVisible = false;
               }
             )
-            return new Promise(resolve => setTimeout(() => resolve(transItem), 500));
+            this.loading = false;
+            this.transactions.forEach(function (trans) {
+              ref.expandedRows[trans.id] = true;
+            });
+            this.expandedRows = Object.assign({}, this.expandedRows);
           }
-        )).subscribe((value: any) => {
-          this.loading = false;
-          this.transactions.forEach(function (trans) {
-            ref.expandedRows[trans.id] = true;
-          });
-          this.expandedRows = Object.assign({}, this.expandedRows);
-          this.progressBarVisible = false;
-        })
+        )
       })
-    });
-
+    })
   }
+
 
   scrollUp() {
     window.scroll(0, 0);

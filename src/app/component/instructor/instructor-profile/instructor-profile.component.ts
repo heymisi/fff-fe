@@ -198,12 +198,18 @@ export class InstructorProfileComponent implements OnInit {
     this.instructorService.deteleInstructor(+this.instructor.id, this.pass.value).subscribe(
       data => {
         if (data) {
+          this.authService.signOut();
           this.confirmationService.confirm({
             message: 'Felhasználó törlésre került, köszönjük, hogy eddig velünk volt!',
             header: 'Törlés',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-              this.router.navigateByUrl("/home");
+              setTimeout(() => {
+                this.router.navigateByUrl("/home")
+                  .then(() => {
+                    window.location.reload();
+                  });
+              }, 1000);
             }
           });
         } else {
@@ -212,7 +218,7 @@ export class InstructorProfileComponent implements OnInit {
       }
     )
   }
-  
+
   logout() {
     this.confirmationService.confirm({
       message: 'Biztos benne, hogy ki szeretne lépni?',

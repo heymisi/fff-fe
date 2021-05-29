@@ -1,3 +1,4 @@
+import { TrainingSessionService } from "../services/training-session.service";
 import { Address } from "./address";
 import { Cart } from "./cart";
 import { ContactData } from "./contact-data";
@@ -16,6 +17,8 @@ export class User {
     shippingAddress?: Address;
     billingAddress?: Address;
     contactData?: ContactData;
+    trainingSessions?: TrainingSessionService[];
     created?: Date;
     cart?: Cart;
+    comments?: Comment[];
 }

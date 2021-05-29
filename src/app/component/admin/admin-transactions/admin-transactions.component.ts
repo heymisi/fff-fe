@@ -34,7 +34,7 @@ export class AdminTransactionsComponent implements OnInit {
         this.users = data;
         return new Promise(resolve => setTimeout(() => resolve(data), 500));
       })).subscribe((value: any) => {
-        this.transactionService.getTransactions().pipe(concatMap(
+        this.transactionService.getTransactions().subscribe(
           data => {
             this.transactions = data;
             this.users.forEach(user => {
@@ -55,25 +55,21 @@ export class AdminTransactionsComponent implements OnInit {
                     }
                   })
                 })
-              }
-            )
-            return new Promise(resolve => setTimeout(() => resolve(data), 500));
-          }
-        )).subscribe((value: any) => {
-          this.utilService.getShopItems().subscribe(shopItem => {
-            shopItem.forEach(item => {
-              this.transactions.forEach(transaction => {
-                for (let i = 0; i < transaction.transactionItems.length; i++) {
-                  if (transaction.transactionItems[i].shopItem === item.id) {
-                    transaction.transactionItems[i].shopItem = item;
-                    break;
-                  }
-                }
+                this.utilService.getShopItems().subscribe(shopItem => {
+                  shopItem.forEach(item => {
+                    this.transactions.forEach(transaction => {
+                      for (let i = 0; i < transaction.transactionItems.length; i++) {
+                        if (transaction.transactionItems[i].shopItem === item.id) {
+                          transaction.transactionItems[i].shopItem = item;
+                          break;
+                        }
+                      }
+                    })
+                  })
+                  this.loading = false;
+                })
               })
-            })
-            this.loading = false;
           })
-        })
       })
   }
 

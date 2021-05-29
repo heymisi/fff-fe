@@ -27,9 +27,9 @@ export class AdminProductsComponent implements OnInit {
   customUpload = true;
   productCategories: ProductCategory[] = [];
   sports: Sport[] = [];
+  progressBarVisible: boolean = false;
 
-
-  selectedFile: File;
+  selectedFile: File = null;
   retrievedImage: any;
   base64Data: any;
   retrieveResonse: any;
@@ -49,6 +49,7 @@ export class AdminProductsComponent implements OnInit {
       products => {
         this.products = products;
         this.loading = false;
+        this.progressBarVisible = false;
       })
   }
   listProductCategories() {
@@ -91,7 +92,7 @@ export class AdminProductsComponent implements OnInit {
       }
     });
   }
-  
+
   findIndexById(id: string): number {
     let index = -1;
     for (let i = 0; i < this.products.length; i++) {
@@ -105,6 +106,7 @@ export class AdminProductsComponent implements OnInit {
 
   editProduct(product: Product) {
     this.product = { ...product };
+    this.selectedFile = null;
     this.productDialog = true;
   }
 
@@ -116,52 +118,60 @@ export class AdminProductsComponent implements OnInit {
   saveProduct() {
     this.submitted = true;
     if (this.product.name.trim()) {
-      if (this.product.id) {
-        this.productCategories.forEach(category => {
-          if (category.categoryName == this.product.category.categoryName) {
-            this.product.category = category;
-          }
-        })
-        this.sports.forEach(sport => {
-          if (sport.name == this.product.sportType.name) {
-            this.product.sportType = sport;
-          }
-        })
-        this.product.transactionItems = [];
-        this.product.comments = [];
-
-        this.productService.modifyProduct(+this.product.id, this.product).subscribe(
-          data => {
-            if (this.selectedFile !== null) {
-              this.addImage(data.payload.id)
+      if (!this.product.name ||
+        !this.product.description || !this.product.category ||
+        !this.product.sportType || !this.product.price || !this.product.unitsInStock) {
+        this.messageService.add({ key: 'admin-product-key', severity: 'error', summary: 'Hiba', detail: 'Töltsd ki az összes mezőt', life: 3000 });
+      } else {
+        if (this.product.id) {
+          this.productCategories.forEach(category => {
+            if (category.categoryName == this.product.category.categoryName) {
+              this.product.category = category;
             }
-            this.products[this.findIndexById(this.product.id)] = this.product;
-            this.messageService.add({ key: 'admin-product-key', severity: 'success', summary: 'Sikeres', detail: 'A termék módosítás megtörtént', life: 3000 });
-            this.productDialog = false;
-            this.products = [...this.products];
-            this.product = {};
-          },
-          error => {
-            this.messageService.add({ key: 'admin-product-key', severity: 'error', summary: 'Hiba', detail: 'Hiba történt a termék módosítása közben', life: 3000 });
-            return;
-          }
-        );
-      }
-      else {
-        this.productService.saveProduct(this.product).subscribe(
-          data => {
-            this.products.push(data.payload);
-            this.addImage(data.payload.id)
-            this.messageService.add({ key: 'admin-product-key', severity: 'success', summary: 'Sikeres', detail: 'Az új termék létrehozása megtörtént', life: 3000 });
-            this.productDialog = false;
-            this.products = [...this.products];
-            this.product = {};
-          },
-          error => {
-            this.messageService.add({ key: 'admin-product-key', severity: 'error', summary: 'Hiba', detail: 'Hiba történt a termék létrehozása közben', life: 3000 });
-            return;
-          }
-        )
+          })
+          this.sports.forEach(sport => {
+            if (sport.name == this.product.sportType.name) {
+              this.product.sportType = sport;
+            }
+          })
+          this.product.transactionItems = [];
+          this.product.comments = [];
+
+          this.productService.modifyProduct(+this.product.id, this.product).subscribe(
+            data => {
+              if (this.selectedFile !== null) {
+                this.addImage(data.id)
+              }
+              this.products[this.findIndexById(this.product.id)] = this.product;
+              this.messageService.add({ key: 'admin-product-key', severity: 'success', summary: 'Sikeres', detail: 'A termék módosítás megtörtént', life: 3000 });
+              this.productDialog = false;
+              this.products = [...this.products];
+              this.product = {};
+            },
+            error => {
+              this.messageService.add({ key: 'admin-product-key', severity: 'error', summary: 'Hiba', detail: 'Hiba történt a termék módosítása közben', life: 3000 });
+              return;
+            }
+          );
+        }
+        else {
+          this.productService.saveProduct(this.product).subscribe(
+            data => {
+              this.products.push(data);
+              if (this.selectedFile !== null) {
+                this.addImage(data.id)
+              }
+              this.messageService.add({ key: 'admin-product-key', severity: 'success', summary: 'Sikeres', detail: 'Az új termék létrehozása megtörtént', life: 3000 });
+              this.productDialog = false;
+              this.products = [...this.products];
+              this.product = {};
+            },
+            error => {
+              this.messageService.add({ key: 'admin-product-key', severity: 'error', summary: 'Hiba', detail: 'Hiba történt a termék létrehozása közben', life: 3000 });
+              return;
+            }
+          )
+        }
       }
     }
   }
@@ -173,6 +183,7 @@ export class AdminProductsComponent implements OnInit {
   addImage(id: number) {
     const uploadImageData = new FormData();
     uploadImageData.append('imageFile', this.selectedFile, this.selectedFile.name);
+    this.progressBarVisible = true;
     this.productService.addImage(id, uploadImageData).pipe(concatMap(
       value => {
         return new Promise(resolve => setTimeout(() => resolve(value), 500));
@@ -181,7 +192,6 @@ export class AdminProductsComponent implements OnInit {
       this.listProducts();
     })
   }
-
 
   scrollUp() {
     window.scroll(0, 0);

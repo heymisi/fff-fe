@@ -1,8 +1,7 @@
 <p-toast position="center">
 </p-toast>
-
-<div class="detail-section">
-    <div class="container" style="padding-top: 80px; background-color: white;">
+<div class="main-content" style="padding-top: 5%;">
+    <div class="container" style=" background-color: white;" *ngIf="!progressBarVisible">
         <div class="row">
             <div class="col-7 item-photo">
                 <img class="p-shadow-4" src={{product.imageString}} width="670px" height="600px" />
@@ -58,12 +57,11 @@
 
             </div>
         </div>
-        <div style="width:100%;">
-
+        <div style="width:100%; padding-top: 1em;">
             <h2>Termék Leírása:</h2>
-            <p style="padding:15px;">
+            <h3 style="padding:15px;">
                 {{product.description}}
-            </p>
+            </h3>
         </div>
         <mat-divider style="padding-bottom: 20px;"></mat-divider>
         <div class="col-12 col-sm-12 header">
@@ -121,7 +119,7 @@
                                     <mat-card-subtitle>elküldve: {{comment.created | date:'short':'+0100':'HU'}}
                                     </mat-card-subtitle>
                                 </mat-card-header>
-                                <mat-card-content style="font-size: 1em">
+                                <mat-card-content style="font-size: 1.4em">
                                     <div style="padding-bottom: 1.4em;"><b>Értékelése:</b>
                                         <ngb-rating style="font-size: 1.7em;" [rate]="comment.rate" [readonly]="true" [max]="5"> </ngb-rating>
                                         ({{comment.rate}})
@@ -136,4 +134,8 @@
             </div>
         </div>
     </div>
+</div>
+<div class="loading-indicator" *ngIf="progressBarVisible">
+    <mat-progress-spinner style="margin:0 auto;" mode="indeterminate">
+    </mat-progress-spinner>
 </div>

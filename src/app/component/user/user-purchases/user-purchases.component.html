@@ -61,13 +61,13 @@
                     </div>
 
                 </div>
-                <div class="col-xl-9 order-xl-2 mb-5 mb-xl-0" *ngIf="!progressBarVisible">
+                <div class="col-xl-9 order-xl-2 mb-5 mb-xl-0">
                     <div class="card bg-secondary shadow">
                         <div class="card-header bg-white border-0">
                             <div class="text-center">
                                 <h1 class="mb-0"><b>Vásárlásaim</b></h1>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body" *ngIf="!progressBarVisible">
                                 <div *ngIf="transactions.length === 0 else elseBlock">
                                     <div class="text-center main-content" style="padding-top: 3em; padding-bottom: 3em;">
                                         <h1><em>Még nem történtek vásárlásaim</em></h1>

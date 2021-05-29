@@ -30,7 +30,8 @@ export class ProductDetailsComponent implements OnInit {
   quantity: number = 1;
   isLoggedIn: Boolean = false;
   user: User = null;
-  
+  progressBarVisible: boolean = false;
+
   constructor(
     private productService: ProductService,
     private cartService: CartService,
@@ -46,6 +47,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.progressBarVisible = true;
     this.isLoggedInCheck();
     this.getUser();
     this.createForm();
@@ -71,6 +73,7 @@ export class ProductDetailsComponent implements OnInit {
           }
         })
       })
+      this.progressBarVisible = false;
     })
   }
 

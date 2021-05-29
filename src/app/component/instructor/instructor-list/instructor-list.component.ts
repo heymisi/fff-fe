@@ -74,11 +74,11 @@ export class InstructorListComponent implements OnInit {
   }
 
   listInstructors() {
+    this.progressBarVisible = true;
     this.instructorService.getInstructorsWithFilter(this.pageNumber - 1,
       this.pageSize,
       this.name.value,
-      this.city.value,
-      this.selectedSport).subscribe(
+      this.city.value).subscribe(
         this.proccessResult())
   }
 
@@ -107,7 +107,12 @@ export class InstructorListComponent implements OnInit {
   }
 
   handleSearchInstructorBySport(sport: any) {
+    this.progressBarVisible = true;
     this.selectedSport = sport.name;
-    this.listInstructors();
+    this.instructorService.getInstructorBySport(this.pageNumber - 1,
+      this.pageSize,
+      sport.name).subscribe(
+        this.proccessResult()
+      );
   }
 }

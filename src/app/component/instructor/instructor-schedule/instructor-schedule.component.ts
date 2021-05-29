@@ -25,7 +25,7 @@ export class InstructorScheduleComponent implements OnInit {
   trainingSessionsByDays: any[][] = [
     [], [], [], [], [], [], []
   ];
-
+  progressBarVisible: boolean = true;
 
   constructor(private route: ActivatedRoute,
     private instructorService: InstructorService,
@@ -67,17 +67,23 @@ export class InstructorScheduleComponent implements OnInit {
               }
             )).subscribe((value: any) => {
               this.filterTrainingSessionsByDays();
+              this.progressBarVisible = false;
             })
           })
       })
     } else {
-      this.trainingSessionService.getTrainingSessionByInstructor(instructorId).subscribe(value => {
+      this.trainingSessionService.getTrainingSessionByInstructorAndAvalability(instructorId).subscribe(value => {
         this.trainingSessions = value;
         this.filterTrainingSessionsByDays();
+        this.progressBarVisible = false;
       })
     }
   }
-
+  sortTrainingSessions() {
+    this.trainingSessionsByDays.forEach(weekday => {
+      weekday.sort((a, b) => (a.sessionStart > b.sessionStart) ? 1 : ((b.sessionStart > a.sessionStart) ? -1 : 0))
+    })
+  }
   filterTrainingSessionsByDays() {
     this.trainingSessions.forEach(session => {
       if (session.day === "Hétfő")
@@ -101,21 +107,35 @@ export class InstructorScheduleComponent implements OnInit {
       else if (session.day === "Vasárnap")
         this.trainingSessionsByDays[6].push(session);
     })
+    this.sortTrainingSessions();
   }
 
   addTrainingSession(session: TrainingSession) {
     if (this.authService.isLoggedIn()) {
-      this.userService.addTrainingSession(+this.user.id, session.id).subscribe();
-      this.confirmationService.confirm({
-        message: 'Jelentkezése erre az időpontra megtörtént, további információkért az oktatónk keresni fogja önt. Jelentkezéseit megtekintheti a személyes adatok menüpontban',
-        header: 'Sikeres jelentkezés',
-        icon: 'fa fa-check',
-        accept: () => {
-          location.reload();
-        }
-      });
-    } else {
+      this.progressBarVisible = true;
+      this.userService.addTrainingSession(+this.user.id, session.id).subscribe(
+        data => {
+          this.progressBarVisible = false;
+          if (data.payload === 'SESSION_TIME_ALREADY_OCCUPIED') {
+            this.messageService.add({ severity: 'error', summary: 'Hiba', detail: `Erre az időpontra már van edzésed foglalva, jelentkezz le arról, ha erre szeretnél jelentkezni`, life: 4000 });
+          } else {
+            this.confirmationService.confirm({
+              message: 'Jelentkezése erre az időpontra megtörtént, további információkért az oktatónk keresni fogja önt. Jelentkezéseit megtekintheti a személyes adatok menüpontban',
+              header: 'Sikeres jelentkezés',
+              icon: 'fa fa-check',
+              accept: () => {
+                for (let i = 0; i < this.trainingSessionsByDays.length; i++) {
+                  this.trainingSessionsByDays[i] = this.trainingSessionsByDays[i].filter(val =>
+                    val.id !== session.id);
+                }
+              }
+            })
+          }
+        });
+    }
+    else {
       this.messageService.add({ severity: 'error', summary: 'Jelentkezz be', detail: `Jelentkezés edzés időpontokra csak bejelentkezés után lehetséges`, life: 4000 });
     }
+
   }
 }

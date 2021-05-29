@@ -5,10 +5,10 @@
             <div class="timetable">
                 <mat-tab-group color="primary" backgroundColor="primary">
                     <mat-tab label="Hétfő">
-                        <div *ngIf="trainingSessionsByDays[0].length === 0;" class="day-not-working">
+                        <div *ngIf="trainingSessionsByDays[0] && trainingSessionsByDays[0].length === 0;" class="day-not-working">
                             <h1>Ezen a napon nincsenek elérhető órák</h1>
                         </div>
-                        <div *ngIf="trainingSessionsByDays[0].length != 0;">
+                        <div *ngIf="trainingSessionsByDays[0] && trainingSessionsByDays[0].length != 0;">
                             <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
                                 <div class="tab-pane show active">
                                     <div class="row">
@@ -28,8 +28,8 @@
                                                         <div class="col-md-7">
                                                             <h2>
                                                                 <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Csoportos edzés'">
-                                                                    {{day.trainingSessionType}} max
-                                                                    <b>{{day.maxClientNumber}}</b> fő
+                                                                    {{day.trainingSessionType}} - létszám:
+                                                                    {{day.maxClientNumber}}/{{day.client.length}}
                                                                 </span>
                                                                 <span class="timetable-item-time" *ngIf="day.trainingSessionType === 'Személyi edzés'">
                                                                     {{day.trainingSessionType}}</span>
@@ -50,10 +50,10 @@
                         </div>
                     </mat-tab>
                     <mat-tab label="Kedd">
-                        <div *ngIf="trainingSessionsByDays[1].length === 0;" class="day-not-working">
+                        <div *ngIf="trainingSessionsByDays[1] && trainingSessionsByDays[1].length === 0;" class="day-not-working">
                             <h1>Ezen a napon nincsenek elérhető órák</h1>
                         </div>
-                        <div *ngIf="trainingSessionsByDays[1].length != 0; ">
+                        <div *ngIf="trainingSessionsByDays[1] && trainingSessionsByDays[1].length != 0; ">
                             <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
                                 <div class="tab-pane show active">
                                     <div class="row">
@@ -95,10 +95,10 @@
                         </div>
                     </mat-tab>
                     <mat-tab label="Szerda">
-                        <div *ngIf="trainingSessionsByDays[2].length === 0;" class="day-not-working">
+                        <div *ngIf="trainingSessionsByDays[2] && trainingSessionsByDays[2].length === 0;" class="day-not-working">
                             <h1>Ezen a napon nincsenek elérhető órák</h1>
                         </div>
-                        <div *ngIf="trainingSessionsByDays[2].length != 0;">
+                        <div *ngIf="trainingSessionsByDays[2] && trainingSessionsByDays[2].length != 0;">
                             <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
                                 <div class="tab-pane show active">
                                     <div class="row">
@@ -140,10 +140,10 @@
                         </div>
                     </mat-tab>
                     <mat-tab label="Csütörtök">
-                        <div *ngIf="trainingSessionsByDays[3].length === 0;" class="day-not-working">
+                        <div *ngIf="trainingSessionsByDays[3] && trainingSessionsByDays[3].length === 0;" class="day-not-working">
                             <h1>Ezen a napon nincsenek elérhető órák</h1>
                         </div>
-                        <div *ngIf="trainingSessionsByDays[3].length != 0;">
+                        <div *ngIf="trainingSessionsByDays[3] && trainingSessionsByDays[3].length != 0;">
                             <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
                                 <div class="tab-pane show active">
                                     <div class="row">
@@ -185,10 +185,10 @@
                         </div>
                     </mat-tab>
                     <mat-tab label="Péntek">
-                        <div *ngIf="trainingSessionsByDays[4].length === 0;" class="day-not-working">
+                        <div *ngIf="trainingSessionsByDays[4] && trainingSessionsByDays[4].length === 0;" class="day-not-working">
                             <h1>Ezen a napon nincsenek elérhető órák</h1>
                         </div>
-                        <div *ngIf="trainingSessionsByDays[4].length != 0;">
+                        <div *ngIf="trainingSessionsByDays[4] && trainingSessionsByDays[4].length != 0;">
                             <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
                                 <div class="tab-pane show active">
                                     <div class="row">
@@ -230,10 +230,10 @@
                         </div>
                     </mat-tab>
                     <mat-tab label="Szombat">
-                        <div *ngIf="trainingSessionsByDays[5].length === 0;" class="day-not-working">
+                        <div *ngIf="trainingSessionsByDays[5] && trainingSessionsByDays[5].length === 0;" class="day-not-working">
                             <h1>Ezen a napon nincsenek elérhető órák</h1>
                         </div>
-                        <div *ngIf="trainingSessionsByDays[5].length != 0;">
+                        <div *ngIf="trainingSessionsByDays[5] && trainingSessionsByDays[5].length != 0;">
                             <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
                                 <div class="tab-pane show active">
                                     <div class="row">
@@ -275,10 +275,10 @@
                         </div>
                     </mat-tab>
                     <mat-tab label="Vasárnap">
-                        <div *ngIf="trainingSessionsByDays[6].length === 0;" class="day-not-working">
+                        <div *ngIf="trainingSessionsByDays[6] && trainingSessionsByDays[6].length === 0;" class="day-not-working">
                             <h1>Ezen a napon nincsenek elérhető órák</h1>
                         </div>
-                        <div *ngIf="trainingSessionsByDays[6].length != 0">
+                        <div *ngIf="trainingSessionsByDays[6] && trainingSessionsByDays[6].length != 0">
                             <div class="tab-content" style="overflow: hidden; padding-bottom: 2em;">
                                 <div class="tab-pane show active">
                                     <div class="row">
@@ -329,3 +329,7 @@
         <button type="button" pButton icon="fa fa-check" label="Rendben" (click)="cd.accept()"></button>
     </p-footer>
 </p-confirmDialog>
+<div class="loading-indicator" *ngIf="progressBarVisible">
+    <mat-progress-spinner style="margin:0 auto;" mode="indeterminate">
+    </mat-progress-spinner>
+</div>

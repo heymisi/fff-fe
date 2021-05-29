@@ -40,7 +40,7 @@ export class CartService {
     this.totalQuantity.next(user.cart.cartItemQuantity);
   }
 
-  remove(userId: number, itemId: number) {
+  remove(cartItem: TransactionItem, userId: number, itemId: number) {
     return this.httpClient.get<any>(`https://fitforfun-backend.herokuapp.com/cart/${userId}/deleteFromCart/${itemId}`);
   }
   addItemToCart(userId: number, item: TransactionItemRequestModel): Observable<any> {

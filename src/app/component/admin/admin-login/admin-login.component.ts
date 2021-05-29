@@ -63,14 +63,15 @@ export class AdminLoginComponent implements OnInit {
         this.tokenStorage.saveAuthorities(data.role);
         if (!this.authService.isAdmin()) {
           this.messageService.add({ severity: 'error', summary: 'Sikertelen bejelentkezés', detail: `Nincs jogosultságod belépni!`, life: 1000 });
+        }else{
+          this.messageService.add({ severity: 'success', summary: 'Üdvözlünk', detail: `Üdvözlünk`, life: 1000 });
+          setTimeout(() => {
+            this.router.navigateByUrl("/admin/products")
+              .then(() => {
+                window.location.reload();
+              });
+          }, 1000);
         }
-        this.messageService.add({ severity: 'success', summary: 'Üdvözlünk', detail: `Üdvözlünk`, life: 1000 });
-        setTimeout(() => {
-          this.router.navigateByUrl("/admin/products")
-            .then(() => {
-              window.location.reload();
-            });
-        }, 1000);
       },
       error => {
         this.messageService.add({ severity: 'error', summary: 'Sikertelen bejelentkezés', detail: `Ez a felhasználónév vagy jelszó nem megfelelő`, life: 5000 });

@@ -193,7 +193,6 @@
                         </ul>
                     </ng-template>
                 </p-fileUpload>
-                <small class="p-error" *ngIf="submitted && !selectedFile">Kép felöltése kötelező.</small>
 
                 <div class="p-field">
                     <h2><b><label for="name">Létesítmény neve</label></b></h2>
@@ -209,7 +208,6 @@
                         </ul>
                     </ng-template>
                 </p-fileUpload>
-                <small class="p-error" *ngIf="submitted && !selectedMapFile">Kép felöltése kötelező.</small>
                 <div class="p-formgrid p-grid">
 
                     <div class="p-field p-col">
@@ -312,17 +310,12 @@
                             <p-inputNumber id="price" [(ngModel)]="price.singleTicketPrice" mode="currency"
                                 currency="HUF" locale="hu-HU" [minFractionDigits]="0">
                             </p-inputNumber>
-                            <small class="p-error" *ngIf="submitted && !price.singleTicketPrice">Kérjük adja meg az
-                                alkalmi jegy árát</small>
                         </div>
                         <div class="p-field p-col">
                             <em> <b><label>Bérleti ár</label></b></em>
                             <p-inputNumber id="price" [(ngModel)]="price.sessionTicketPrice" mode="currency"
                                 currency="HUF" locale="hu-HU" [minFractionDigits]="0">
                             </p-inputNumber>
-                            <small class="p-error" *ngIf="submitted && !price.sessionTicketPrice">Kérjük adja meg a
-                                bérleti jegy árát</small>
-
                         </div>
                     </div>
                 </span>
@@ -335,16 +328,13 @@
                             <em><b><label>alkalmi jegy ár</label></b></em>
                             <p-inputNumber id="price" mode="currency" currency="HUF" locale="hu-HU"
                                 [minFractionDigits]="0" [(ngModel)]="price.singleTicketPrice"></p-inputNumber>
-                            <small class="p-error" *ngIf="submitted && !price.singleTicketPrice">Kérjük adja meg az
-                                alkalmi jegy árát</small>
-
+                            
                         </div>
                         <div class="p-field p-col">
                             <em> <b><label>Bérleti ár</label></b></em>
                             <p-inputNumber id="price" mode="currency" currency="HUF" locale="hu-HU"
                                 [minFractionDigits]="0" [(ngModel)]="price.sessionTicketPrice"></p-inputNumber>
-                            <small class="p-error" *ngIf="submitted && !price.sessionTicketPrice">Kérjük adja meg a
-                                bérleti jegy árát</small>
+                           
                         </div>
                     </div>
                 </span>
@@ -364,7 +354,6 @@
             </ng-template>
         </p-dialog>
     </div>
-
 
     <p-confirmDialog #cd [style]="{width: '450px'}">
         <p-footer>

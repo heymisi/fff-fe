@@ -21,6 +21,7 @@ import { UtilService } from 'src/app/services/util.service';
   styleUrls: ['./instructor-details.component.css']
 })
 export class InstructorDetailsComponent implements OnInit {
+  progressBarVisible: boolean = true;
   instructor: Instructor = null;
   facility: Facility = null;
   sports: Sport[] = [];
@@ -62,13 +63,13 @@ export class InstructorDetailsComponent implements OnInit {
             }
           }
         })
+        this.progressBarVisible = false;
       })
       if (value.payload.sportFacility) {
         this.facilityService.getFacility(value.payload.sportFacility).subscribe(
           data => {
             this.facility = data.payload;
           }
-
         )
       }
     })

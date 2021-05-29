@@ -66,8 +66,20 @@
                     <h2 class="my-0 font-weight-normal">{{price.ageGroup}}</h2>
                 </div>
                 <div class="card-body">
-                    <h3 class="card-title pricing-card-title">Alkalmi jegy: {{price.singleTicketPrice}} HUF<small class="text-muted">/ alkalom</small></h3>
-                    <h3 class="card-title pricing-card-title">Bérlet: {{price.sessionTicketPrice}} HUF<small class="text-muted">/ hónap</small></h3>
+                    <div *ngIf="price.singleTicketPrice===0; else ticketPriceNotNull">
+                        <h3 class="card-title pricing-card-title">Alkalmi jegy: <span style="color: teal;">Ingyenes</span></h3>
+                    </div>
+                    <ng-template #ticketPriceNotNull>
+                        <h3 class="card-title pricing-card-title">Alkalmi jegy: {{price.singleTicketPrice}} HUF<small class="text-muted">/ alkalom</small></h3>
+                    </ng-template>
+
+                    <div *ngIf="price.sessionTicketPrice===0; else sessionPriceNotNull">
+                        <h3 class="card-title pricing-card-title">Bérlet: <span style="color: teal;">Ingyenes</span>
+                        </h3>
+                    </div>
+                    <ng-template #sessionPriceNotNull>
+                        <h3 class="card-title pricing-card-title">Bérlet: {{price.sessionTicketPrice}} HUF<small class="text-muted">/ hónap</small></h3>
+                    </ng-template>
                 </div>
             </div>
         </div>
@@ -81,11 +93,11 @@
                 <ng-template #elseInstructor>
                     <ul class="list-unstyled mb-0">
                         <li *ngFor="let instructor of facility.instructors">
-                            <div class="row">
-                                <div class="col-lg-1">
-                                    <div mat-card-avatar class="example-header-image"></div>
+                            <div class="row align-middle" style="padding-bottom:30px;">
+                                <div class="col-lg-4">
+                                    <a routerLink="/instructors/{{instructor.id}}"><img src={{instructor.imageString}} width="300px" /></a>
                                 </div>
-                                <div class="col-lg-11">
+                                <div class="col-lg-7 align-middle">
                                     <a routerLink="/instructors/{{instructor.id}}" style="padding-top: 10px;">{{instructor.user?.firstName}}
                                         {{instructor.user?.lastName}}</a>
                                 </div>
@@ -107,7 +119,7 @@
 
         <hr>
         <h2><b>Leírás:</b></h2>
-        <p>{{facility?.description}}</p>
+        <h3>{{facility?.description}}</h3>
 
         <a class="mt-5" routerLink="/facilities" style="color: black;">
             <i class="fa fa-chevron-circle-left">Vissza a többi sportlétesítményhez</i>
@@ -189,3 +201,8 @@
             </mat-expansion-panel>
         </mat-accordion>
     </div>
+</div>
+<div class="loading-indicator" *ngIf="progressBarVisible">
+    <mat-progress-spinner style="margin:0 auto;" mode="indeterminate">
+    </mat-progress-spinner>
+</div>

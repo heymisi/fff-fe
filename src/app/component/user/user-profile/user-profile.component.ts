@@ -18,7 +18,7 @@ import { FormValidators } from 'src/app/validators/form-validators';
 
 })
 export class UserProfileComponent implements OnInit {
-
+  progressBarVisible: boolean = true;
   user: User = null;
   profileFormGroup: FormGroup;
   profilePassFormGroup: FormGroup;
@@ -42,7 +42,6 @@ export class UserProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.getUser();
     this.getCities();
     this.getCounties();
@@ -72,7 +71,9 @@ export class UserProfileComponent implements OnInit {
         oldPass: new FormControl('', [Validators.required, Validators.minLength(6), FormValidators.notOnlyWhitespace]),
         newPass: new FormControl('', [Validators.required, Validators.minLength(6), FormValidators.notOnlyWhitespace]),
         newPassAgain: new FormControl('', [Validators.required, Validators.minLength(6), FormValidators.notOnlyWhitespace]),
-        passForDelete: new FormControl('', [Validators.required, Validators.minLength(6), FormValidators.notOnlyWhitespace]),
+      }),
+      passForDelete: this.formBuilder.group({
+        password: new FormControl('', [Validators.required, Validators.minLength(6), FormValidators.notOnlyWhitespace]),
       })
     })
   }
@@ -88,11 +89,12 @@ export class UserProfileComponent implements OnInit {
   get oldPass() { return this.profilePassFormGroup.get('pass.oldPass'); }
   get newPass() { return this.profilePassFormGroup.get('pass.newPass'); }
   get newPassAgain() { return this.profilePassFormGroup.get('pass.newPassAgain'); }
-  get passForDelete() { return this.profilePassFormGroup.get('pass.passForDelete'); }
+  get password() { return this.profilePassFormGroup.get('passForDelete.password'); }
 
   getUser() {
     this.authService.getUser().subscribe(user => {
       this.user = user;
+      this.progressBarVisible = false;
     });
   }
   getCities() {
@@ -120,16 +122,22 @@ export class UserProfileComponent implements OnInit {
       this.messageService.add({ severity: 'info', summary: 'Nem történt módosítás', detail: 'Ha változtatni szeretne adatain, írja át a kivánt mezőket!', life: 5000 });
       return;
     }
+    this.progressBarVisible = true;
+    this.user.cart = null;
+    this.user.transactions = null;
+    this.user.trainingSessions = null;
+    this.user.comments = null;
     this.userService.modifyUser(+this.user.id, this.user).subscribe(
       data => {
         this.messageService.add({ severity: 'success', summary: 'Sikeres módosítás', detail: 'A megadott adatokat felülírása sikeresen megtörtént!', life: 5000 });
+        this.progressBarVisible = false;
       }
     )
   }
 
   changePass() {
-    if (this.profilePassFormGroup.invalid) {
-      this.profilePassFormGroup.markAllAsTouched();
+    if (this.profilePassFormGroup.get('pass').invalid) {
+      this.profilePassFormGroup.get('pass').markAllAsTouched();
       this.messageService.add({ severity: 'error', summary: 'Hiba', detail: 'Jelszava megváltoztatásához javítsa a hibás mezőket', life: 5000 });
       return;
     }
@@ -177,27 +185,43 @@ export class UserProfileComponent implements OnInit {
   }
 
   deleteProfile() {
-    if (this.passForDelete.invalid) {
-      this.passForDelete.markAllAsTouched();
+    if (this.password.invalid) {
+      this.password.markAllAsTouched();
       this.messageService.add({ severity: 'error', summary: 'Hiba', detail: 'Kérjük adja meg jelszavát a folytatáshoz', life: 5000 });
       return;
     }
-    this.userService.deleteUser(+this.user.id, this.passForDelete.value).subscribe(
-      data => {
-        if (data) {
-          this.confirmationService.confirm({
-            message: 'Felhasználó törlésre került, köszönjük, hogy eddig velünk volt!',
-            header: 'Törlés',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-              this.router.navigateByUrl("/home");
+    this.confirmationService.confirm({
+      message: 'Biztos benne, hogy törli felhasználó fiókját? ',
+      header: 'Törlés',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.progressBarVisible = true;
+        this.userService.deleteUser(+this.user.id, this.password.value).subscribe(
+          data => {
+            if (data) {
+              this.authService.signOut();
+              this.confirmationService.confirm({
+                message: 'Felhasználó törlésre került, köszönjük, hogy eddig velünk volt!',
+                header: 'Törlés',
+                icon: 'pi pi-exclamation-triangle',
+                accept: () => {
+                  setTimeout(() => {
+                    this.router.navigateByUrl("/home")
+                      .then(() => {
+                        window.location.reload();
+                      });
+                  }, 1000);
+                }
+              });
+            } else {
+              this.progressBarVisible = false;
+              this.messageService.add({ severity: 'error', summary: 'Hiba', detail: 'Jelszava nem megfelelő, kérjük adja meg helyes jelszavát', life: 5000 });
             }
-          });
-        } else {
-          this.messageService.add({ severity: 'error', summary: 'Hiba', detail: 'Jelszava nem megfelelő, kérjük adja meg helyes jelszavát', life: 5000 });
-        }
-      }
-    )
+          }
+        )
+      },
+      key: "delete"
+    });
   }
   logout() {
     this.confirmationService.confirm({

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CommentRequestModel } from '../common/comment-request-model';
 import { Facility } from '../common/facility';
+import { FacilityRequestModel } from '../common/facility-request-model';
 import { FacilityResponse } from '../common/facility-response';
 import { Instructor } from '../common/instructor';
 
@@ -22,16 +23,20 @@ export class FacilityService {
     const facilityUrl = `${this.baseUrl}/${facilityId}`;
     return this.httpClient.get<any>(facilityUrl);
   }
+  
+  getFacilityBySport(thePage: number, thePageSize: number,sport: string):Observable<any>{
+    return this.httpClient.get<any>(`${this.baseUrl}/bySport?sport=${sport}`);
+  }
 
-  modifyFacility(id: number, facility: Facility): Observable<any> {
+  modifyFacility(id: number, facility: FacilityRequestModel): Observable<any> {
     return this.httpClient.put<any>(`${this.baseUrl}/${id}`, facility);
   }
 
-  saveFacility(facility: Facility): Observable<any> {
+  saveFacility(facility: FacilityRequestModel): Observable<any> {
     return this.httpClient.post<any>(this.baseUrl, facility);
   }
   getFacilitiesWithFilter(thePage: number, thePageSize: number,
-    name: string, address: string, sport: string
+    name: string, address: string
   ): Observable<any> {
 
     let searchUrl: any;
@@ -39,12 +44,10 @@ export class FacilityService {
 
     let nameFilter: any;
     let addressFilter: any;
-    let sportFilter: any;
     name ? nameFilter = name : nameFilter = ""
     address ? addressFilter = address : addressFilter = ""
-    sport ? sportFilter = sport : sportFilter = ""
 
-    searchUrl = searchUrl + `&name=${nameFilter}&address=${addressFilter}&sport=${sportFilter}`
+    searchUrl = searchUrl + `&name=${nameFilter}&address=${addressFilter}`
     return this.httpClient.get<any>(searchUrl);
   }
 

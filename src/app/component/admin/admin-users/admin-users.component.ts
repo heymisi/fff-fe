@@ -29,10 +29,10 @@ export class AdminUsersComponent implements OnInit {
     private userService: UserService) { }
 
   ngOnInit(): void {
-    this.listInstructors();
+    this.listUsers();
   }
-  listInstructors() {
-    this.userService.getUsers().subscribe(
+  listUsers() {
+    this.userService.getUsersWithUserRole().subscribe(
       data => {
         this.users = data;
         this.loading = false;

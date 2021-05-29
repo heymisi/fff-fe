@@ -58,7 +58,7 @@
                                                                     <div class="aside"><img src={{tempCartItem.shopItem.imageString}} style="width: 250px;" class="p-shadow-4">
                                                                     </div>
                                                                     <figcaption class="info">
-                                                                        <a href="#" class="title text-dark" data-abc="true">
+                                                                        <a href="/products/{{tempCartItem.shopItem.id}}" class="title text-dark" data-abc="true">
                                                                             <h1><b>{{tempCartItem.shopItem.name}}</b>
                                                                             </h1>
                                                                         </a>
@@ -70,7 +70,7 @@
                                                             </td>
                                                             <td class="align-middle">
                                                                 <label for="minmax-buttons">Mennyiség</label>
-                                                                <p-inputNumber [ngModel]="tempCartItem.quantity" [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="20" (onInput)="quantityChange(tempCartItem, tempCartItem.quantity, $event.value)">
+                                                                <p-inputNumber [ngModel]="tempCartItem.quantity" [showButtons]="true" inputId="minmax-buttons" [min]="1" [max]="20" (onInput)="quantityChange(tempCartItem, tempCartItem.quantity, $event.value)">
                                                                 </p-inputNumber>
                                                             </td>
                                                             <td class="align-middle">
@@ -113,7 +113,7 @@
                                                 <hr> <button class="btn btn-out btn-success btn-main" matStepperNext>
                                                     <i class="bi bi-cash"></i> Vásárlás
                                                 </button>
-                                                <a href="#" class="btn btn-out blue-btn btn-square btn-main mt-2" data-abc="true"> <i class="fa fa-chevron-left"></i> Vissza a termékekhez
+                                                <a href="/products" class="btn btn-out blue-btn btn-square btn-main mt-2" data-abc="true"> <i class="fa fa-chevron-left"></i> Vissza a termékekhez
                                                 </a>
                                             </div>
                                         </div>

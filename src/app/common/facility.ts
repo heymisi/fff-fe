@@ -2,6 +2,7 @@ import { Address } from "./address";
 import { CommentEntity } from "./comment-entity";
 import { ContactData } from "./contact-data";
 import { FacilityPricing } from "./facility-pricing";
+import { Image } from "./image";
 import { Instructor } from "./instructor";
 import { OpeningHours } from "./opening-hours";
 import { Rating } from "./rating";
@@ -23,5 +24,7 @@ export class Facility {
     rating?: Rating;
     profileImageString?: String;
     mapImageString?: String;
+    mapImage?: Image;
+    profileImage?: Image;
 
 }

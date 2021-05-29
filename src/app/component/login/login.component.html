@@ -17,10 +17,10 @@
 											class="material-icons">local_post_office</i>
 										<i class="strict">*</i></span>
                                 </div>
-                                <mat-form-field appearance="fill">
+                                <mat-form-field appearance="fill" style="font-size: larger;">
                                     <mat-label>Email cím</mat-label>
                                     <input formControlName="email" matInput placeholder="pelda@gmail.com">
-                                    <mat-error>
+                                    <mat-error style="font-size: large;">
                                         <div *ngIf="email.invalid && (email.dirty || email.touched)">
                                             <ng-container *ngFor="let error of errors(email)">
                                                 {{ errorMessagesEmail[error] }}
@@ -36,12 +36,12 @@
                                     <span class="input-group-text" style="color: white;"><i class="fas fa-key"><i
 												class="strict"></i></i></span>
                                 </div>
-                                <mat-form-field appearance="fill">
+                                <mat-form-field appearance="fill" style="font-size: larger;">
                                     <mat-label>Jelszó</mat-label>
                                     <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
                                     <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
                                     </mat-icon>
-                                    <mat-error *ngIf="password.hasError('required')">Kérjük adja meg jelszavát!
+                                    <mat-error style="font-size: large;" *ngIf="password.hasError('required')">Kérjük adja meg jelszavát!
                                     </mat-error>
                                 </mat-form-field>
                             </div>

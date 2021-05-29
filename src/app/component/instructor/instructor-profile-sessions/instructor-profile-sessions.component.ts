@@ -22,6 +22,8 @@ export class InstructorProfileSessionsComponent implements OnInit {
   instructor: Instructor;
   trainingSessions: TrainingSession[];
   user: User = null;
+  progressBarVisible: boolean = true;
+
   constructor(private trainingSessionService: TrainingSessionService,
     private instructorService: InstructorService,
     private confirmationService: ConfirmationService,
@@ -45,6 +47,7 @@ export class InstructorProfileSessionsComponent implements OnInit {
     "Személyi edzés", "Csoportos edzés"
   ]
   ngOnInit(): void {
+    this.progressBarVisible = true;
     this.getUser();
     this.sessionFormGroup = this.formBuilder.group({
       weekDay: new FormControl('', [Validators.required]),
@@ -97,6 +100,7 @@ export class InstructorProfileSessionsComponent implements OnInit {
               }
             }
           }
+          this.progressBarVisible = false;
         })
         this.weekDays.forEach(weekday => {
           this.trainingSessions.forEach(session => {
@@ -145,9 +149,18 @@ export class InstructorProfileSessionsComponent implements OnInit {
       this.messageService.add({ severity: 'error', summary: 'Hiba', detail: 'Kérjük töltse ki a piros mezőket!', life: 5000 });
       return;
     }
+    if(this.sessionStart === this.sessionEnd){
+      this.messageService.add({ severity: 'error', summary: 'Hiba', detail: 'Hiba az edzési időpontok megadása közben!', life: 5000 });
+      return;
+    }
     if (this.type.value === "Csoportos edzés") {
       if (this.clientNumber.value === 1) {
         this.messageService.add({ severity: 'error', summary: 'Hiba', detail: 'Csoportos edzés esetén legalább 2 kell legyen a résztevők száma!', life: 5000 });
+        return;
+      }
+    }else{
+      if(this.clientNumber.value !== 1){
+        this.messageService.add({ severity: 'error', summary: 'Hiba', detail: 'Személyes edzés esetén csak 1 lehet a résztvevők száma!', life: 5000 });
         return;
       }
     }
@@ -176,6 +189,7 @@ export class InstructorProfileSessionsComponent implements OnInit {
   }
 
   hideDialog() {
+    this.sessionFormGroup.markAsUntouched();
     this.addDialog = false;
   }
 

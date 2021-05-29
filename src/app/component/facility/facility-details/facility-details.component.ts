@@ -32,7 +32,8 @@ export class FacilityDetailsComponent implements OnInit {
   submitted: Boolean = false;
   isLoggedIn: Boolean = false;
   user: User = null;
-  
+  progressBarVisible: boolean = true;
+
   weekDaysNameAndNumber: any[] = [
     { "day": "Hétfő", "number": 1 },
     { "day": "Kedd", "number": 2 },
@@ -106,6 +107,7 @@ export class FacilityDetailsComponent implements OnInit {
               this.facility.instructors[i] = inst;
             }
           }
+          this.progressBarVisible = false;
         })
       })
     })
